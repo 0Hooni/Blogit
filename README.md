@@ -35,4 +35,6 @@ npm install
 npx expo start
 ```
 
+---
+
 문의사항이나 피드백은 언제든지 이슈를 통해 남겨주세요!
