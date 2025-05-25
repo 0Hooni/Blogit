@@ -1,0 +1,44 @@
+# Expo
+/.expo
+.expo-shared/
+
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+build/
+web-build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Lock files (auto-generated)
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env*
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# Bundle and minified files
+*.bundle.js
+*.min.js
+
+# Git
+.git/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Markdown files
+*.md
