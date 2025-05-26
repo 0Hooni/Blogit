@@ -2,7 +2,7 @@ name: Coderabbit PR
 
 on:
   pull_request:
-    types: [opened, synchronize]  # PR 생성 + 커밋 추가 시 실행
+    types: [opened, synchronize]
 
 jobs:
   update-pr:
