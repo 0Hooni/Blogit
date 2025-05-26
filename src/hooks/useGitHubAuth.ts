@@ -50,8 +50,6 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
     discovery,
   );
 
-  console.log(request?.redirectUri); 
-
   const signInWithGitHub = useCallback(async () => {
     try {
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
@@ -110,8 +108,6 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
         isLoading: false,
         error: errorMessage,
       }));
-
-      console.log(errorMessage)
 
       Alert.alert("로그인 실패", errorMessage, [
         { text: "확인", style: "default" },
