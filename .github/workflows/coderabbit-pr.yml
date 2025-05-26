@@ -2,7 +2,7 @@ name: Coderabbit PR
 
 on:
   pull_request_target:
-    types: [opened, reopened]
+    types: [opened, synchronize]
 
 jobs:
   update-pr:
