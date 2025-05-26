@@ -1,0 +1,24 @@
+name: Coderabbit PR
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  update-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set PR title and body
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prNumber = context.payload.pull_request.number;
+
+            await github.rest.pulls.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber,
+              title: "@coderabbitai",
+              body: "@coderabbitai summary"
+            });
