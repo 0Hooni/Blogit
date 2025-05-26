@@ -17,13 +17,16 @@ const Title = styled.Text`
   font-size: 28px;
   line-height: 36px;
   color: #141414;
+  margin-top: 80px;
 `;
 
 const SubTitle = styled.Text`
   font-weight: regular;
   font-size: 16px;
   line-height: 24px;
+  text-align: center;
   color: #141414;
+  margin-top: 60px;
 `;
 
 const GitHubButton = styled.TouchableOpacity`
@@ -34,6 +37,7 @@ const GitHubButton = styled.TouchableOpacity`
   padding: 12px 20px;
   border-radius: 24px;
   background-color: #030213;
+  margin-top: 100px;
 `;
 
 const GithubCatImage = styled.Image`
@@ -51,16 +55,16 @@ const GitHubButtonText = styled.Text`
 export default function LoginScreen() {
   return (
     <Container>
-      <LogoImage source={require("../../assets/images/base/logo.png")} />
+      <LogoImage source={require("../../assets/images/base/icon.png")} />
       <Title>Blogit</Title>
       <SubTitle>
         {"GitHub Pages 블로그의 모든 것을\n모바일에서 손쉽게 관리하세요"}
       </SubTitle>
       <GitHubButton>
         <GithubCatImage
-          source={require("../../assets/images/icon/github-cat.png")}
+          source={require("../../assets/images/icon/github-cat/github-cat.png")}
         />
-        <GitHubButtonText>GitHub으로 시작하기</GitHubButtonText>
+        <GitHubButtonText>GitHub 계정으로 로그인하기</GitHubButtonText>
       </GitHubButton>
     </Container>
   );
