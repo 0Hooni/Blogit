@@ -1,3 +1,4 @@
+import { useGitHubAuth } from "@hooks/useGitHubAuth";
 import styled from "styled-components/native";
 
 const Container = styled.View`
@@ -53,6 +54,12 @@ const GitHubButtonText = styled.Text`
 `;
 
 export default function LoginScreen() {
+  const { signInWithGitHub, isLoading } = useGitHubAuth();
+
+  const handleGitHubLogin = async () => {
+    await signInWithGitHub();
+  }
+
   return (
     <Container>
       <LogoImage source={require("../../assets/images/base/icon.png")} />
@@ -60,7 +67,11 @@ export default function LoginScreen() {
       <SubTitle>
         {"GitHub Pages 블로그의 모든 것을\n모바일에서 손쉽게 관리하세요"}
       </SubTitle>
-      <GitHubButton>
+      <GitHubButton
+        onPress = { handleGitHubLogin }
+        disabled = { isLoading }
+        activeOpacity = { 0.8 }
+      >
         <GithubCatImage
           source={require("../../assets/images/icon/github-cat/github-cat.png")}
         />

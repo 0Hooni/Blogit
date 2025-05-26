@@ -10,14 +10,16 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.0hooni.blogit"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/base/adaptive-icon.png",
         "backgroundColor": "#030213"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.0hooni.blogit"
     },
     "web": {
       "bundler": "metro",
