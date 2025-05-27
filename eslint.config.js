@@ -50,6 +50,7 @@ module.exports = defineConfig([
   {
     rules: {
       "no-unused-vars": "off",
+      "import/no-named-as-default": "off",
     },
   },
 ]);
