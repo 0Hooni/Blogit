@@ -70,12 +70,14 @@ export default function LoginScreen() {
       <GitHubButton
         onPress={handleGitHubLogin}
         disabled={isLoading}
-        activeOpacity={0.8}
+        activeOpacity={isLoading ? 0.6 : 1}
       >
         <GithubCatImage
           source={require("../../assets/images/icon/github-cat/github-cat.png")}
         />
-        <GitHubButtonText>GitHub 계정으로 로그인하기</GitHubButtonText>
+        <GitHubButtonText>
+          {isLoading ? "로그인 중..." : "GitHub 계정으로 로그인하기"}
+        </GitHubButtonText>
       </GitHubButton>
     </Container>
   );
