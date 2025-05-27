@@ -4,7 +4,9 @@
     "strict": true,
     "paths": {
       "@/*": ["./*"],
-      "@/firebaseConfig": ["./firebaseConfig"]
+      "@/firebaseConfig": ["./firebaseConfig"],
+      "@/contexts/*": ["./src/contexts/*"],
+      "@/hooks/*": ["./src/hooks/*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
