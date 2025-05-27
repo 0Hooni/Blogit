@@ -91,6 +91,12 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
         );
 
         const tokenData = await tokenResponse.json();
+        
+        if (!tokenResponse.ok) {
+          throw new Error(
+            `GitHub API 오류: ${tokenData.error_description || tokenData.error || "알 수 없는 오류"}`
+          );
+        }
 
         if (tokenData.access_token) {
           // Firebase GitHub 인증
@@ -105,7 +111,9 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
             isLoading: false,
           }));
         } else {
-          throw new Error("GitHub 엑세스 토큰을 받을 수 없습니다.");
+          throw new Error(
+            `GitHub 엑세스 토큰을 받을 수 없습니다: ${tokenData.error_description || "알 수 없는 오류"}`
+          );
         }
       } else if (result.type == "cancel") {
         setState((prev) => ({ ...prev, isLoading: false }));
