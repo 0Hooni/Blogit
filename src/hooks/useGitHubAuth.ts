@@ -38,9 +38,24 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
     tokenEndpoint: "https://github.com/login/oauth/access_token",
   };
 
+  const GITHUB_CLIENT_ID = process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID;
+  const GITHUB_CLIENT_SECRET = process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET;
+
+  if (!GITHUB_CLIENT_ID) {
+    throw new Error(
+      "EXPO_PUBLIC_GITHUB_CLIENT_ID 환경 변수가 설정되지 않았습니다.",
+    );
+  }
+
+  if (!GITHUB_CLIENT_SECRET) {
+    throw new Error(
+      "EXPO_PUBLIC_GITHUB_CLIENT_SECRET 환경 변수가 설정되지 않았습니다.",
+    );
+  }
+
   const [request, response, promptAsync] = AuthSession.useAuthRequest(
     {
-      clientId: process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID!,
+      clientId: GITHUB_CLIENT_ID,
       scopes: ["user:email", "read:user"],
       redirectUri: AuthSession.makeRedirectUri({
         scheme: "blogit",
@@ -68,8 +83,8 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              client_id: process.env.EXPO_PUBLIC_GITHUB_CLIENT_ID,
-              client_secret: process.env.EXPO_PUBLIC_GITHUB_CLIENT_SECRET,
+              client_id: GITHUB_CLIENT_ID,
+              client_secret: GITHUB_CLIENT_SECRET,
               code,
             }),
           },
