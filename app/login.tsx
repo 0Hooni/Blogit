@@ -1,5 +1,6 @@
+import { useAuth } from "@/src/contexts/AuthContext";
+import { Redirect } from "expo-router";
 import styled from "styled-components/native";
-import { useGitHubAuth } from "../../src/hooks/useGitHubAuth";
 
 const Container = styled.View`
   flex: 1;
@@ -54,15 +55,17 @@ const GitHubButtonText = styled.Text`
 `;
 
 export default function LoginScreen() {
-  const { signInWithGitHub, isLoading } = useGitHubAuth();
+  const { user, signIn, isLoading } = useAuth();
+
+  if (user) return <Redirect href="/" />;
 
   const handleGitHubLogin = async () => {
-    await signInWithGitHub();
+    await signIn();
   };
 
   return (
     <Container>
-      <LogoImage source={require("../../assets/images/base/icon.png")} />
+      <LogoImage source={require("@/assets/images/base/icon.png")} />
       <Title>Blogit</Title>
       <SubTitle>
         {"GitHub Pages 블로그의 모든 것을\n모바일에서 손쉽게 관리하세요"}
@@ -73,7 +76,7 @@ export default function LoginScreen() {
         activeOpacity={0.8}
       >
         <GithubCatImage
-          source={require("../../assets/images/icon/github-cat/github-cat.png")}
+          source={require("@/assets/images/icon/github-cat/github-cat.png")}
         />
         <GitHubButtonText>GitHub 계정으로 로그인하기</GitHubButtonText>
       </GitHubButton>
