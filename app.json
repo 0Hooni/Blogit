@@ -11,7 +11,8 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.0hooni.blogit"
+      "bundleIdentifier": "com.0hooni.blogit",
+      "appleTeamId": "9JZYRP3D46"
     },
     "android": {
       "adaptiveIcon": {
