@@ -1,6 +1,5 @@
 import { auth } from "@/firebaseConfig";
 import { useGitHubAuth } from "@/src/hooks/useGitHubAuth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, SplashScreen } from "expo-router";
 import { User as FirebaseUser, onAuthStateChanged } from "firebase/auth";
 import {
@@ -21,8 +20,6 @@ interface AuthContextType {
   signOut: () => Promise<void>; // 로그아웃 함수
 }
 
-const authStorageKey = "auth-key";
-
 export const AuthContext = createContext<AuthContextType | undefined>(
   undefined,
 );
@@ -39,16 +36,8 @@ export function AuthProvider({ children }: AuthContextProps) {
   const { signInWithGitHub, signOut: githubSignOut } = useGitHubAuth();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
-
-      // AsyncStorage에 인증 상태 저장
-      if (firebaseUser) {
-        await AsyncStorage.setItem(authStorageKey, "true");
-      } else {
-        await AsyncStorage.removeItem(authStorageKey);
-      }
-
       setIsInitialized(true);
     });
 
