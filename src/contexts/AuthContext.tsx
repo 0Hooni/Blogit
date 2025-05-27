@@ -1,5 +1,7 @@
 import { auth } from "@/firebaseConfig";
+import { useGitHubAuth } from "@/src/hooks/useGitHubAuth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router, SplashScreen } from "expo-router";
 import { User as FirebaseUser, onAuthStateChanged } from "firebase/auth";
 import {
   createContext,
@@ -8,7 +10,8 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useGitHubAuth } from "../hooks/useGitHubAuth";
+
+SplashScreen.preventAutoHideAsync();
 
 interface AuthContextType {
   user: FirebaseUser | null; // 현재 로그인된 사용자
@@ -18,7 +21,11 @@ interface AuthContextType {
   signOut: () => Promise<void>; // 로그아웃 함수
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const authStorageKey = "auth-key";
+
+export const AuthContext = createContext<AuthContextType | undefined>(
+  undefined,
+);
 
 interface AuthContextProps {
   children: ReactNode;
@@ -37,9 +44,9 @@ export function AuthProvider({ children }: AuthContextProps) {
 
       // AsyncStorage에 인증 상태 저장
       if (firebaseUser) {
-        await AsyncStorage.setItem("isAuthenticated", "true");
+        await AsyncStorage.setItem(authStorageKey, "true");
       } else {
-        await AsyncStorage.removeItem("isAuthenticated");
+        await AsyncStorage.removeItem(authStorageKey);
       }
 
       setIsInitialized(true);
@@ -53,6 +60,7 @@ export function AuthProvider({ children }: AuthContextProps) {
 
     try {
       await signInWithGitHub();
+      router.replace("/");
     } finally {
       setIsLoading(false);
     }
@@ -63,10 +71,18 @@ export function AuthProvider({ children }: AuthContextProps) {
 
     try {
       await githubSignOut();
+      router.replace("/login");
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (isInitialized) {
+      SplashScreen.hideAsync();
+      setIsLoading(false);
+    }
+  }, [isInitialized]);
 
   return (
     <AuthContext.Provider
