@@ -23,7 +23,7 @@ const Title = styled.Text`
 `;
 
 const SubTitle = styled.Text`
-  font-weight: regular;
+  font-weight: normal;
   font-size: 16px;
   line-height: 24px;
   text-align: center;
