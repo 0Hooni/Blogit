@@ -44,6 +44,21 @@ export default function TabsLayout() {
               fontWeight: "bold",
               marginLeft: 16,
             },
+            tabBarStyle: {
+              backgroundColor:
+                scheme === "dark"
+                  ? theme.dark.colors.background
+                  : theme.light.colors.background,
+              borderTopWidth: 0,
+            },
+            tabBarActiveTintColor:
+              scheme === "dark"
+                ? theme.dark.colors.foreground
+                : theme.light.colors.foreground,
+            tabBarInactiveTintColor:
+              scheme === "dark"
+                ? theme.dark.colors.mutedForeground
+                : theme.light.colors.mutedForeground,
           }}
         >
           <Tabs.Screen name="index" options={{ title: "홈" }} />
