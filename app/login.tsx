@@ -60,7 +60,11 @@ export default function LoginScreen() {
   if (user) return <Redirect href="/" />;
 
   const handleGitHubLogin = async () => {
-    await signIn();
+    try {
+      await signIn();
+    } catch (error) {
+      console.error("GitHub 로그인 실패:", error);
+    }
   };
 
   return (
