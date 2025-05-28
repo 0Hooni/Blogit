@@ -1,6 +1,7 @@
 const { defineConfig } = require("eslint/config");
 const expoConfig = require("eslint-config-expo/flat");
 const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended");
+const { rules } = require("eslint-config-prettier");
 
 module.exports = defineConfig([
   expoConfig,
@@ -45,5 +46,11 @@ module.exports = defineConfig([
       ".vscode/**",
       ".idea/**",
     ],
+  },
+  {
+    rules: {
+      "no-unused-vars": "off",
+      "import/no-unresolved": ["error", { ignore: ["^@/"] }],
+    },
   },
 ]);
