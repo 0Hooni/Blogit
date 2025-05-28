@@ -1,10 +1,10 @@
 import { useAuth } from "@/src/contexts/AuthContext";
-import styled from "styled-components/native";
+import { styled } from "styled-components/native";
 
 const Container = styled.View`
   flex: 1;
-  padding: 20px;
-  background-color: #f5f5f5;
+  padding: 12px;
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const Header = styled.View`
@@ -18,33 +18,28 @@ const Title = styled.Text`
   color: #141414;
 `;
 
-const UserInfoCard = styled.View`
-  background-color: white;
+const SectionCard = styled.View`
+  background-color: transparent;
   border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  shadow-color: #000;
-  shadow-offset: 0px 2px;
-  shadow-opacity: 0.1;
-  shadow-radius: 4px;
-  elevation: 3;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  padding: 8px 16px;
 `;
 
 const UserInfoLabel = styled.Text`
   font-size: 14px;
-  color: #666;
+  color: ${({ theme }) => theme.colors.foreground};
   margin-bottom: 5px;
 `;
 
 const UserInfoValue = styled.Text`
   font-size: 16px;
   font-weight: 600;
-  color: #141414;
+  color: ${({ theme }) => theme.colors.foreground};
   margin-bottom: 15px;
 `;
 
 const LogoutButton = styled.TouchableOpacity`
-  background-color: #ff4444;
+  background-color: ${({ theme }) => theme.colors.destructive};
   border-radius: 12px;
   padding: 16px;
   align-items: center;
@@ -52,7 +47,7 @@ const LogoutButton = styled.TouchableOpacity`
 `;
 
 const LogoutButtonText = styled.Text`
-  color: white;
+  color: ${({ theme }) => theme.colors.foreground};
   font-size: 16px;
   font-weight: bold;
 `;
