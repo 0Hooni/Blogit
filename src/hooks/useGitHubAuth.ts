@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 import * as AuthSession from "expo-auth-session";
@@ -7,6 +7,7 @@ import * as WebBrowser from "expo-web-browser";
 import {
   User as FirebaseUser,
   GithubAuthProvider,
+  onAuthStateChanged,
   signInWithCredential,
 } from "firebase/auth";
 
@@ -32,6 +33,15 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
     isLoading: false,
     error: null,
   });
+
+  // Firebase 인증 상태 리스너 등록
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setState((prev) => ({ ...prev, user }));
+    });
+
+    return unsubscribe;
+  }, []);
 
   const discovery = {
     authorizationEndpoint: "https://github.com/login/oauth/authorize",
@@ -99,17 +109,13 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
         }
 
         if (tokenData.access_token) {
-          // Firebase GitHub 인증
+          // Firebase GitHub 인증 (onAuthStateChanged에서 user 상태 업데이트됨)
           const credential = GithubAuthProvider.credential(
             tokenData.access_token,
           );
-          const userCredential = await signInWithCredential(auth, credential);
+          await signInWithCredential(auth, credential);
 
-          setState((prev) => ({
-            ...prev,
-            user: userCredential.user,
-            isLoading: false,
-          }));
+          setState((prev) => ({ ...prev, isLoading: false }));
         } else {
           throw new Error(
             `GitHub 엑세스 토큰을 받을 수 없습니다: ${tokenData.error_description || "알 수 없는 오류"}`,
@@ -142,13 +148,10 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
     try {
       setState((prev) => ({ ...prev, isLoading: true, error: null }));
 
+      // Firebase 로그아웃 (onAuthStateChanged에서 user 상태 업데이트됨)
       await auth.signOut();
 
-      setState((prev) => ({
-        ...prev,
-        user: null,
-        isLoading: false,
-      }));
+      setState((prev) => ({ ...prev, isLoading: false }));
     } catch (error) {
       const errorMessage =
         error instanceof Error
