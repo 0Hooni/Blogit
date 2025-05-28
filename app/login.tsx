@@ -1,4 +1,5 @@
 import { useAuth } from "@/src/contexts/AuthContext";
+import { textStyle } from "@/src/styles/textStyle";
 import { Redirect } from "expo-router";
 import { styled } from "styled-components/native";
 
@@ -17,19 +18,15 @@ const LogoImage = styled.Image`
 `;
 
 const Title = styled.Text`
-  font-weight: bold;
-  font-size: 28px;
-  line-height: 36px;
   color: ${({ theme }) => theme.colors.foreground};
+  ${textStyle("display")}
   margin-top: 80px;
 `;
 
 const SubTitle = styled.Text`
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
   text-align: center;
   color: ${({ theme }) => theme.colors.mutedForeground};
+  ${textStyle("body1")}
   margin-top: 60px;
 `;
 
@@ -45,9 +42,7 @@ const GitHubButton = styled.TouchableOpacity`
 `;
 
 const GitHubButtonText = styled.Text`
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 24px;
+  ${textStyle("button1")}
   color: ${({ theme }) => theme.colors.primaryForeground};
 `;
 
