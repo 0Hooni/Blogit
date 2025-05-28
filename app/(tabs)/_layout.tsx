@@ -1,3 +1,4 @@
+import { useFontLoaded } from "@/src/components/FontLoaders";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { theme } from "@/src/styles/theme";
 import { Redirect, Tabs } from "expo-router";
@@ -12,6 +13,10 @@ const AppContainer = styled.View`
 export default function TabsLayout() {
   const scheme = useColorScheme();
   const { user } = useAuth();
+
+  const fontsLoaded = useFontLoaded();
+
+  if (!fontsLoaded) return null;
 
   if (!user) return <Redirect href="/login" />;
 
