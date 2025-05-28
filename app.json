@@ -11,7 +11,7 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.0hooni.blogit",
+      "bundleIdentifier": "com.blogit.app",
       "appleTeamId": "9JZYRP3D46",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
@@ -23,7 +23,7 @@
         "backgroundColor": "#030213"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.0hooni.blogit"
+      "package": "com.blogit.app"
     },
     "web": {
       "bundler": "metro",
