@@ -1,41 +1,63 @@
 import { useAuth } from "@/src/contexts/AuthContext";
+import { textStyle } from "@/src/styles/textStyle";
 import { styled } from "styled-components/native";
 
 const Container = styled.View`
   flex: 1;
-  padding: 12px;
+  padding: 16px;
   background-color: ${({ theme }) => theme.colors.background};
-`;
-
-const Header = styled.View`
-  margin-top: 60px;
-  margin-bottom: 40px;
-`;
-
-const Title = styled.Text`
-  font-size: 28px;
-  font-weight: bold;
-  color: #141414;
+  gap: 16px;
 `;
 
 const SectionCard = styled.View`
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
   background-color: transparent;
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 8px 16px;
 `;
 
-const UserInfoLabel = styled.Text`
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.foreground};
-  margin-bottom: 5px;
+const TouchableSectionCard = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  background-color: transparent;
+  border-radius: 12px;
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  padding: 8px 16px;
 `;
 
-const UserInfoValue = styled.Text`
-  font-size: 16px;
-  font-weight: 600;
+const ProfileContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+`;
+
+const ProfileImage = styled.Image`
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+`;
+
+const UserName = styled.Text`
+  ${textStyle("section")}
   color: ${({ theme }) => theme.colors.foreground};
-  margin-bottom: 15px;
+`;
+
+const UserNickname = styled.Text`
+  ${textStyle("body2")}
+  color: ${({ theme }) => theme.colors.mutedForeground};
+`;
+
+const AccountSection = styled.View`
+  gap: 8px;
+  align-items: flex-start;
+`;
+
+const AccountSectionTitle = styled.Text`
+  ${textStyle("section")}
+  color: ${({ theme }) => theme.colors.foreground};
 `;
 
 const LogoutButton = styled.TouchableOpacity`
@@ -46,10 +68,22 @@ const LogoutButton = styled.TouchableOpacity`
   margin-top: 20px;
 `;
 
+const LogoutButtonImage = styled.Image`
+  width: 24px;
+  height: 24px;
+  tint-color: ${({ theme }) => theme.colors.destructive};
+`;
+
+const RightChevronImage = styled.Image`
+  width: 24px;
+  height: 24px;
+  tint-color: ${({ theme }) => theme.colors.destructive};
+`;
+
 const LogoutButtonText = styled.Text`
-  color: ${({ theme }) => theme.colors.foreground};
-  font-size: 16px;
-  font-weight: bold;
+  ${textStyle("button2")}
+  color: ${({ theme }) => theme.colors.destructive};
+  flex: 1;
 `;
 
 export default function SettingScreen() {
@@ -61,26 +95,34 @@ export default function SettingScreen() {
 
   return (
     <Container>
-      <Header>
-        <Title>설정</Title>
-      </Header>
+      <SectionCard style={{ marginTop: 24 }}>
+        <ProfileImage source={{ uri: user?.photoURL || "" }} />
+        <ProfileContainer>
+          <UserName>{user?.displayName}</UserName>
+          <UserNickname>{user?.email}</UserNickname>
+        </ProfileContainer>
+      </SectionCard>
 
-      <UserInfoCard>
-        <UserInfoLabel>이름</UserInfoLabel>
-        <UserInfoValue>{user?.displayName || "이름 없음"}</UserInfoValue>
-
-        <UserInfoLabel>이메일</UserInfoLabel>
-        <UserInfoValue>{user?.email || "이메일 없음"}</UserInfoValue>
-
-        <UserInfoLabel>UID</UserInfoLabel>
-        <UserInfoValue>{user?.uid || "UID 없음"}</UserInfoValue>
-      </UserInfoCard>
-
-      <LogoutButton onPress={handleLogout} disabled={isLoading}>
-        <LogoutButtonText>
-          {isLoading ? "로그아웃 중..." : "로그아웃"}
-        </LogoutButtonText>
-      </LogoutButton>
+      <AccountSection style={{ marginTop: 16 }}>
+        <AccountSectionTitle>계정</AccountSectionTitle>
+        <TouchableSectionCard
+          onPress={handleLogout}
+          disabled={isLoading}
+          style={{
+            opacity: isLoading ? 0.9 : 1,
+          }}
+        >
+          <LogoutButtonImage
+            source={require("@/assets/images/icons/logout/logout.png")}
+          />
+          <LogoutButtonText>
+            {isLoading ? "로그아웃 중..." : "로그아웃"}
+          </LogoutButtonText>
+          <RightChevronImage
+            source={require("@/assets/images/icons/right-chevron/right-chevron.png")}
+          />
+        </TouchableSectionCard>
+      </AccountSection>
     </Container>
   );
 }
