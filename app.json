@@ -12,7 +12,10 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.0hooni.blogit",
-      "appleTeamId": "9JZYRP3D46"
+      "appleTeamId": "9JZYRP3D46",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -41,6 +44,12 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5905ae65-125d-4864-8d7e-d64b5be8a26e"
+      }
     }
   }
 }
