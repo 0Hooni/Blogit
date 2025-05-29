@@ -12,6 +12,7 @@ import {
 } from "firebase/auth";
 
 import { auth } from "@/firebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // WebBrowser 설정 (iOS에서 인증 후 앱으로 돌아오기 위함)
 WebBrowser.maybeCompleteAuthSession();
@@ -110,6 +111,7 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
 
         // GitHub access token 획득
         const accessToken = await getGitHubAccessToken(code);
+        await AsyncStorage.setItem("github_access_token", accessToken);
 
         // Firebase GitHub credential 생성 및 로그인
         const credential = GithubAuthProvider.credential(accessToken);
