@@ -1,3 +1,4 @@
+import { UserProfile } from "@/src/components/UserProfile";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { textStyle } from "@/src/styles/textStyle";
 import { styled } from "styled-components/native";
@@ -27,27 +28,6 @@ const TouchableSectionCard = styled.TouchableOpacity`
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   padding: 8px 16px;
-`;
-
-const ProfileContainer = styled.View`
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-const ProfileImage = styled.Image`
-  width: 48px;
-  height: 48px;
-  border-radius: 24px;
-`;
-
-const UserName = styled.Text`
-  ${textStyle("section")}
-  color: ${({ theme }) => theme.colors.foreground};
-`;
-
-const UserNickname = styled.Text`
-  ${textStyle("body2")}
-  color: ${({ theme }) => theme.colors.mutedForeground};
 `;
 
 const AccountSection = styled.View`
@@ -95,14 +75,7 @@ export default function SettingScreen() {
 
   return (
     <Container>
-      <SectionCard style={{ marginTop: 24 }}>
-        <ProfileImage source={{ uri: user?.photoURL || "" }} />
-        <ProfileContainer>
-          <UserName>{user?.displayName}</UserName>
-          <UserNickname>{user?.email}</UserNickname>
-        </ProfileContainer>
-      </SectionCard>
-
+      <UserProfile />
       <AccountSection style={{ marginTop: 16 }}>
         <AccountSectionTitle>계정</AccountSectionTitle>
         <TouchableSectionCard
