@@ -1,3 +1,4 @@
+import { ThemedIcon } from "@/src/components/ThemedIcon";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { textStyle } from "@/src/styles/textStyle";
 import { Redirect } from "expo-router";
@@ -71,6 +72,7 @@ export default function LoginScreen() {
         disabled={isLoading}
         activeOpacity={0.8}
       >
+        <ThemedIcon name="logo-github" size={24} variant="primaryForeground" />
         <GitHubButtonText>GitHub 계정으로 로그인하기</GitHubButtonText>
       </GitHubButton>
     </Container>

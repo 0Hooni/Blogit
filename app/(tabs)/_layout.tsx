@@ -1,6 +1,7 @@
 import { useFontLoaded } from "@/src/components/FontLoaders";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { theme } from "@/src/styles/theme";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Redirect, Tabs } from "expo-router";
 import { useColorScheme } from "react-native";
 import { styled, ThemeProvider } from "styled-components/native";
@@ -42,7 +43,6 @@ export default function TabsLayout() {
               fontSize: 28,
               lineHeight: 28 * 1.5,
               fontWeight: "bold",
-              marginLeft: 16,
             },
             tabBarStyle: {
               backgroundColor:
@@ -61,8 +61,24 @@ export default function TabsLayout() {
                 : theme.light.colors.mutedForeground,
           }}
         >
-          <Tabs.Screen name="index" options={{ title: "홈" }} />
-          <Tabs.Screen name="setting" options={{ title: "설정" }} />
+          <Tabs.Screen
+            name="index"
+            options={{
+              title: "홈",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="home" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tabs.Screen
+            name="setting"
+            options={{
+              title: "설정",
+              tabBarIcon: ({ color, size }) => (
+                <Ionicons name="settings" color={color} size={size} />
+              ),
+            }}
+          />
         </Tabs>
       </AppContainer>
     </ThemeProvider>

@@ -1,3 +1,4 @@
+import { ThemedIcon } from "@/src/components/ThemedIcon";
 import { UserProfile } from "@/src/components/UserProfile";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { textStyle } from "@/src/styles/textStyle";
@@ -48,18 +49,6 @@ const LogoutButton = styled.TouchableOpacity`
   margin-top: 20px;
 `;
 
-const LogoutButtonImage = styled.Image`
-  width: 24px;
-  height: 24px;
-  tint-color: ${({ theme }) => theme.colors.destructive};
-`;
-
-const RightChevronImage = styled.Image`
-  width: 24px;
-  height: 24px;
-  tint-color: ${({ theme }) => theme.colors.destructive};
-`;
-
 const LogoutButtonText = styled.Text`
   ${textStyle("button2")}
   color: ${({ theme }) => theme.colors.destructive};
@@ -85,14 +74,14 @@ export default function SettingScreen() {
             opacity: isLoading ? 0.9 : 1,
           }}
         >
-          <LogoutButtonImage
-            source={require("@/assets/images/icons/logout/logout.png")}
-          />
+          <ThemedIcon name="log-out-outline" size={24} variant="destructive" />
           <LogoutButtonText>
             {isLoading ? "로그아웃 중..." : "로그아웃"}
           </LogoutButtonText>
-          <RightChevronImage
-            source={require("@/assets/images/icons/right-chevron/right-chevron.png")}
+          <ThemedIcon
+            name="chevron-forward-outline"
+            size={24}
+            variant="destructive"
           />
         </TouchableSectionCard>
       </AccountSection>
