@@ -71,7 +71,9 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
 
   // GitHub에서 access token 획득
   const getGitHubAccessToken = useCallback(
-    async (authCode: string): Promise<string> => {
+    async (
+      authCode: string,
+    ): Promise<{ accessToken: string; refreshToken: string }> => {
       const response = await fetch(discovery.tokenEndpoint, {
         method: "POST",
         headers: {
@@ -93,7 +95,10 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
         );
       }
 
-      return data.access_token;
+      return {
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+      };
     },
     [],
   );
@@ -109,9 +114,11 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
       if (result.type === "success") {
         const { code } = result.params;
 
-        // GitHub access token 획득
-        const accessToken = await getGitHubAccessToken(code);
+        const { accessToken, refreshToken } = await getGitHubAccessToken(code);
         await AsyncStorage.setItem("github_access_token", accessToken);
+        if (refreshToken) {
+          await AsyncStorage.setItem("github_refresh_token", refreshToken);
+        }
 
         // Firebase GitHub credential 생성 및 로그인
         const credential = GithubAuthProvider.credential(accessToken);
@@ -144,6 +151,10 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
       setError(null);
 
       await auth.signOut();
+
+      await AsyncStorage.removeItem("github_access_token");
+      await AsyncStorage.removeItem("github_refresh_token");
+
       // 상태는 onAuthStateChanged에서 자동 업데이트
     } catch (error) {
       const errorMessage =
