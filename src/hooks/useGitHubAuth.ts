@@ -12,6 +12,7 @@ import {
 } from "firebase/auth";
 
 import { auth } from "@/firebaseConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // WebBrowser 설정 (iOS에서 인증 후 앱으로 돌아오기 위함)
 WebBrowser.maybeCompleteAuthSession();
@@ -69,30 +70,38 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
   );
 
   // GitHub에서 access token 획득
-  const getGitHubAccessToken = async (authCode: string): Promise<string> => {
-    const response = await fetch(discovery.tokenEndpoint, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        client_id: GITHUB_CONFIG.clientId,
-        client_secret: GITHUB_CONFIG.clientSecret,
-        code: authCode,
-      }),
-    });
+  const getGitHubAccessToken = useCallback(
+    async (
+      authCode: string,
+    ): Promise<{ accessToken: string; refreshToken: string }> => {
+      const response = await fetch(discovery.tokenEndpoint, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          client_id: GITHUB_CONFIG.clientId,
+          client_secret: GITHUB_CONFIG.clientSecret,
+          code: authCode,
+        }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (!response.ok || !data.access_token) {
-      throw new Error(
-        data.error_description || data.error || "GitHub 토큰 획득 실패"
-      );
-    }
+      if (!response.ok || !data.access_token) {
+        throw new Error(
+          data.error_description || data.error || "GitHub 토큰 획득 실패",
+        );
+      }
 
-    return data.access_token;
-  };
+      return {
+        accessToken: data.access_token,
+        refreshToken: data.refresh_token,
+      };
+    },
+    [],
+  );
 
   const signInWithGitHub = useCallback(async () => {
     try {
@@ -104,14 +113,17 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
 
       if (result.type === "success") {
         const { code } = result.params;
-        
-        // GitHub access token 획득
-        const accessToken = await getGitHubAccessToken(code);
-        
+
+        const { accessToken, refreshToken } = await getGitHubAccessToken(code);
+        await AsyncStorage.setItem("github_access_token", accessToken);
+        if (refreshToken) {
+          await AsyncStorage.setItem("github_refresh_token", refreshToken);
+        }
+
         // Firebase GitHub credential 생성 및 로그인
         const credential = GithubAuthProvider.credential(accessToken);
         await signInWithCredential(auth, credential);
-        
+
         // 상태는 onAuthStateChanged에서 자동 업데이트
       } else if (result.type === "cancel") {
         setIsLoading(false);
@@ -120,7 +132,9 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
       }
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "알 수 없는 오류가 발생했습니다.";
+        error instanceof Error
+          ? error.message
+          : "알 수 없는 오류가 발생했습니다.";
 
       setIsLoading(false);
       setError(errorMessage);
@@ -137,10 +151,16 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
       setError(null);
 
       await auth.signOut();
+
+      await AsyncStorage.removeItem("github_access_token");
+      await AsyncStorage.removeItem("github_refresh_token");
+
       // 상태는 onAuthStateChanged에서 자동 업데이트
     } catch (error) {
       const errorMessage =
-        error instanceof Error ? error.message : "로그아웃 중 오류가 발생했습니다.";
+        error instanceof Error
+          ? error.message
+          : "로그아웃 중 오류가 발생했습니다.";
 
       setIsLoading(false);
       setError(errorMessage);
