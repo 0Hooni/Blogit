@@ -1,6 +1,8 @@
 import { useFontLoaded } from "@/src/components/FontLoaders";
 import { AuthProvider } from "@/src/contexts/AuthContext";
+import { queryClient } from "@/src/lib/queryClient";
 import { theme } from "@/src/styles/theme";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Slot } from "expo-router";
 import { useColorScheme } from "react-native";
 import { styled, ThemeProvider } from "styled-components/native";
@@ -21,11 +23,13 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider theme={scheme === "dark" ? theme.dark : theme.light}>
-      <AuthProvider>
-        <AppContainer>
-          <Slot />
-        </AppContainer>
-      </AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <AppContainer>
+            <Slot />
+          </AppContainer>
+        </AuthProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }
