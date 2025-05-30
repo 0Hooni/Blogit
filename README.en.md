@@ -13,7 +13,6 @@ Built with React Native + Expo, Blogit lets you edit Markdown posts and push the
 - ⬆️ Commit & push posts to GitHub
 - 📁 Edit existing posts in your repo
 - ☁️ (Optional) Cloud draft saving with Firebase
-- 🛠️ Monitor GitHub Pages deployment status
 
 ## 📦 Tech Stack
 
