@@ -19,6 +19,7 @@
 - React Native + Expo
 - GitHub REST API
 - Firebase (Auth, Firestore – 선택적 사용)
+- axios
 
 ## 🌐 다국어 지원
 
