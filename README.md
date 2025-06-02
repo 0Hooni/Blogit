@@ -20,7 +20,6 @@
 - GitHub REST API
 - Firebase (Auth, Firestore – 선택적 사용)
 
-
 ## 🌐 다국어 지원
 
 - 🇰🇷 한국어
