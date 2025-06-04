@@ -59,14 +59,15 @@ export default function TabsLayout() {
               scheme === "dark"
                 ? theme.dark.colors.mutedForeground
                 : theme.light.colors.mutedForeground,
+            tabBarShowLabel: false,
           }}
         >
           <Tabs.Screen
             name="index"
             options={{
               title: "홈",
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="home" color={color} size={size} />
+              tabBarIcon: ({ color }) => (
+                <Ionicons name="home" color={color} size={32} />
               ),
             }}
           />
@@ -74,8 +75,8 @@ export default function TabsLayout() {
             name="setting"
             options={{
               title: "설정",
-              tabBarIcon: ({ color, size }) => (
-                <Ionicons name="settings" color={color} size={size} />
+              tabBarIcon: ({ color }) => (
+                <Ionicons name="settings" color={color} size={32} />
               ),
             }}
           />
