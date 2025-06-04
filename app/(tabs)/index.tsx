@@ -1,3 +1,4 @@
+import { PostCountCard } from "@/src/components/PostCountCard";
 import { ThemedIcon } from "@/src/components/ThemedIcon";
 import { textStyle } from "@/styles/textStyle";
 import { styled } from "styled-components/native";
@@ -84,10 +85,7 @@ export default function HomeScreen() {
   return (
     <Container>
       <CardSection>
-        <CardView>
-          <CardTitle>{"Posts"}</CardTitle>
-          <CardContent>{"12"}</CardContent>
-        </CardView>
+        <PostCountCard />
         <CardView>
           <CardTitle>{"Comments"}</CardTitle>
           <CardContent>{"23"}</CardContent>
