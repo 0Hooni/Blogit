@@ -9,25 +9,47 @@ const Container = styled.View`
   padding: 20px 0px;
 `;
 
-const PostTitle = styled.Text`
-  ${textStyle("body1")};
-  color: ${({ theme }) => theme.colors.foreground};
-  padding: 20px;
-  border-width: 1px;
-  border-color: ${({ theme }) => theme.colors.border};
-  border-radius: 12px;
+const CardSection = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 16px;
+  gap: 16px;
 `;
 
-const Title = styled.Text`
-  font-size: 24px;
-  font-weight: bold;
+const CardView = styled.View`
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px ${({ theme }) => theme.colors.border};
+  width: 50%;
+`;
+
+const CardTitle = styled.Text`
+  ${textStyle("section")};
+  color: ${({ theme }) => theme.colors.foreground};
+`;
+
+const CardContent = styled.Text`
+  ${textStyle("display")};
   color: ${({ theme }) => theme.colors.foreground};
 `;
 
 export default function HomeScreen() {
   return (
     <Container>
-      <PostTitle>{"포스트 갯수"}</PostTitle>
+      <CardSection>
+        <CardView>
+          <CardTitle>{"Posts"}</CardTitle>
+          <CardContent>{"12"}</CardContent>
+        </CardView>
+        <CardView>
+          <CardTitle>{"Comments"}</CardTitle>
+          <CardContent>{"23"}</CardContent>
+        </CardView>
+      </CardSection>
     </Container>
   );
 }
