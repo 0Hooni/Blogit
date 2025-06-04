@@ -13,6 +13,13 @@ export const GITHUB_QUERY_KEY = {
       owner,
       path,
     ],
+    BLOG_POSTS_SUMMARY: (owner: string, path: string = "_posts") => [
+      "github",
+      "repository",
+      "blog-posts-summary",
+      owner,
+      path,
+    ],
   },
 };
 
@@ -47,7 +54,10 @@ export const useBlogPostsSummary = (path: string = "_posts") => {
   const { data: user } = useCurrentUser();
 
   return useQuery({
-    queryKey: GITHUB_QUERY_KEY.REPOSITORY.BLOG_POSTS(user?.login || "", path),
+    queryKey: GITHUB_QUERY_KEY.REPOSITORY.BLOG_POSTS_SUMMARY(
+      user?.login || "",
+      path,
+    ),
     queryFn: () => githubApiService.getBlogPostSummary(path),
     enabled: !!user?.login,
     staleTime: 2 * 60 * 1000,
