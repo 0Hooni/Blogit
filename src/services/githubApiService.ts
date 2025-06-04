@@ -17,8 +17,10 @@ class GitHubApiService {
    * @param path - 디렉토리 경로 (기본값: "_posts")
    * @returns 블로그 포스트 목록
    */
-  async getBlogPosts(path: string = "_posts") {
-    const user = await getCurrentUser();
+  async getBlogPosts(
+    path: string = "_posts",
+  ): Promise<GitHubRepositoryContent> {
+    const user = await this.getCurrentUser();
     const endpoint = DynamicEndpoint.buildBlogPostsEndpoint(user.login, path);
 
     const response = await httpClient.get(endpoint);
@@ -43,7 +45,7 @@ class GitHubApiService {
   private analyzeBlogContent(
     content: GitHubRepositoryContent,
   ): BlogPostSummary {
-    if (!content.entries || content.entries.length === 0) {
+    if (!content) {
       return {
         totalPosts: 0,
         markdownFiles: [],
@@ -51,23 +53,66 @@ class GitHubApiService {
       };
     }
 
-    // 파일만 필터링 (디렉토리 제외)
-    const files = content.entries.filter((item) => item.type === "file");
+    // GitHub API에서 디렉토리 콘텐츠는 배열로 직접 반환됨
+    if (Array.isArray(content)) {
+      const files = content.filter((item) => item.type === "file");
 
-    // 마크다운 파일과 기타 파일 분리
-    const markdownFiles = files.filter(
-      (file) => file.name.endsWith(".md") || file.name.endsWith(".markdown"),
-    );
+      const markdownFiles = files.filter(
+        (file) => file.name.endsWith(".md") || file.name.endsWith(".markdown"),
+      );
 
-    const otherFiles = files.filter(
-      (file) => !file.name.endsWith(".md") && !file.name.endsWith(".markdown"),
-    );
+      const otherFiles = files.filter(
+        (file) =>
+          !file.name.endsWith(".md") && !file.name.endsWith(".markdown"),
+      );
+
+      return {
+        totalPosts: markdownFiles.length,
+        markdownFiles,
+        otherFiles,
+        lastUpdated: new Date().toISOString(),
+      };
+    }
+
+    // entries 프로퍼티가 있는 경우
+    if (content.entries && Array.isArray(content.entries)) {
+      const files = content.entries.filter((item) => item.type === "file");
+
+      const markdownFiles = files.filter(
+        (file) => file.name.endsWith(".md") || file.name.endsWith(".markdown"),
+      );
+
+      const otherFiles = files.filter(
+        (file) =>
+          !file.name.endsWith(".md") && !file.name.endsWith(".markdown"),
+      );
+
+      return {
+        totalPosts: markdownFiles.length,
+        markdownFiles,
+        otherFiles,
+        lastUpdated: new Date().toISOString(),
+      };
+    }
+
+    // 단일 파일인 경우
+    if ((content as GitHubRepositoryContent).type === "file") {
+      const fileContent = content as GitHubRepositoryContent;
+      const isMarkdown =
+        fileContent.name.endsWith(".md") ||
+        fileContent.name.endsWith(".markdown");
+      return {
+        totalPosts: isMarkdown ? 1 : 0,
+        markdownFiles: isMarkdown ? [fileContent] : [],
+        otherFiles: isMarkdown ? [] : [fileContent],
+        lastUpdated: new Date().toISOString(),
+      };
+    }
 
     return {
-      totalPosts: markdownFiles.length,
-      markdownFiles,
-      otherFiles,
-      lastUpdated: new Date().toISOString(),
+      totalPosts: 0,
+      markdownFiles: [],
+      otherFiles: [],
     };
   }
 }
