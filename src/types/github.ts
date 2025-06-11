@@ -53,9 +53,22 @@ export interface GitHubRepositoryContent {
 }
 
 // 블로그 포스트 관련 타입
+export interface BlogPost {
+  id: string;
+  title: string;
+  fileName: string;
+  path: string;
+  publishedDate?: string;
+  lastModified?: string;
+  url: string;
+  downloadUrl: string | null;
+  sha: string;
+}
+
 export interface BlogPostSummary {
   totalPosts: number;
   markdownFiles: GitHubContentItem[];
+  blogPosts: BlogPost[];
   otherFiles: GitHubContentItem[];
   lastUpdated?: string;
 }
