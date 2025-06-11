@@ -20,6 +20,13 @@ export const GITHUB_QUERY_KEY = {
       owner,
       path,
     ],
+    REPOSITORY: (owner: string, repo: string) => [
+      "github",
+      "repository",
+      "info",
+      owner,
+      repo,
+    ],
   },
 };
 
@@ -62,5 +69,20 @@ export const useBlogPostsSummary = (path: string = "_posts") => {
     enabled: !!user?.login,
     staleTime: 2 * 60 * 1000,
     gcTime: 5 * 60 * 1000,
+  });
+};
+
+/**
+ * GitHub Repository 정보를 가져오는 훅
+ * @param owner - Repository 소유자 (사용자명)
+ * @param repo - Repository 이름
+ */
+export const useRepositoryInfo = (owner: string, repo: string) => {
+  return useQuery({
+    queryKey: GITHUB_QUERY_KEY.REPOSITORY.REPOSITORY(owner, repo),
+    queryFn: () => githubApiService.getRepositoryInfo(owner, repo),
+    enabled: !!owner && !!repo, // owner와 repo가 있을 때만 실행
+    staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
+    gcTime: 10 * 60 * 1000, // 10분간 가비지 컬렉션 지연
   });
 };

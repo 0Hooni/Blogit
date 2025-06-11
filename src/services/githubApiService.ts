@@ -1,5 +1,6 @@
 import type {
   BlogPostSummary,
+  GitHubRepository,
   GitHubRepositoryContent,
   GitHubUser,
 } from "@/src/types/github";
@@ -35,6 +36,21 @@ class GitHubApiService {
   async getBlogPostSummary(path: string = "_posts"): Promise<BlogPostSummary> {
     const content = await this.getBlogPosts(path);
     return this.analyzeBlogContent(content);
+  }
+
+  /**
+   * GitHub Repository 정보를 가져옵니다
+   * @param owner - Repository 소유자 (사용자명)
+   * @param repo - Repository 이름
+   * @returns Repository 정보
+   */
+  async getRepositoryInfo(
+    owner: string,
+    repo: string,
+  ): Promise<GitHubRepository> {
+    const endpoint = DynamicEndpoint.buildRepositoryEndpoint(owner, repo);
+    const response = await httpClient.get(endpoint);
+    return response.data;
   }
 
   /**

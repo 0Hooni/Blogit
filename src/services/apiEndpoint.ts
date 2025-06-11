@@ -4,6 +4,7 @@ export const GITHUB_API_ENDPOINT = {
   },
   REPOSITORY: {
     CONTENTS: "/repos/{owner}/{repo}/contents/{path}",
+    REPOSITORY: "/repos/{owner}/{repo}",
   },
 };
 
@@ -46,6 +47,20 @@ export class DynamicEndpoint {
       owner,
       repo: `${owner}.github.io`,
       path,
+    });
+  }
+
+  /**
+   * GitHub Repository 정보 엔드포인트를 생성합니다
+   * @param owner - GitHub 사용자명
+   * @param repo - Repository 이름
+   * @returns 완성된 엔드포인트 URL
+   */
+  static buildRepositoryEndpoint(owner: string, repo: string): string {
+    return this.build(GITHUB_API_ENDPOINT.REPOSITORY.REPOSITORY, {
+      owner,
+      repo,
+      path: "", // path는 사용하지 않지만 타입을 위해 빈 문자열 전달
     });
   }
 }
