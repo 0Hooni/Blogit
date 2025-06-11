@@ -1,4 +1,5 @@
 import type {
+  BlogPost,
   BlogPostSummary,
   GitHubRepository,
   GitHubRepositoryContent,
@@ -54,6 +55,54 @@ class GitHubApiService {
   }
 
   /**
+   * 마크다운 파일명에서 제목을 추출합니다
+   * @param fileName - 파일명 (예: "2024-01-15-hello-world.md")
+   * @returns 추출된 제목
+   */
+  private extractTitleFromFileName(fileName: string): string {
+    // .md, .markdown 확장자 제거
+    const nameWithoutExt = fileName.replace(/\.(md|markdown)$/i, "");
+
+    // Jekyll 형식의 날짜 제거 (YYYY-MM-DD-)
+    const titlePart = nameWithoutExt.replace(/^\d{4}-\d{2}-\d{2}-/, "");
+
+    // 하이픈을 공백으로 변경하고 각 단어의 첫 글자를 대문자로
+    return titlePart;
+  }
+
+  /**
+   * 마크다운 파일명에서 발행 날짜를 추출합니다
+   * @param fileName - 파일명 (예: "2024-01-15-hello-world.md")
+   * @returns 발행 날짜 (ISO 형식) 또는 undefined
+   */
+  private extractDateFromFileName(fileName: string): string | undefined {
+    const dateMatch = fileName.match(/^(\d{4}-\d{2}-\d{2})/);
+    if (dateMatch) {
+      return new Date(dateMatch[1]).toISOString();
+    }
+    return undefined;
+  }
+
+  /**
+   * GitHubContentItem을 BlogPost로 변환합니다
+   * @param item - GitHub 컨텐츠 아이템
+   * @returns 블로그 포스트 객체
+   */
+  private convertToBlogPost(item: any): BlogPost {
+    return {
+      id: item.sha,
+      title: this.extractTitleFromFileName(item.name),
+      fileName: item.name,
+      path: item.path,
+      publishedDate: this.extractDateFromFileName(item.name),
+      lastModified: undefined, // GitHub Contents API로는 마지막 수정 시간을 가져올 수 없음
+      url: item.url,
+      downloadUrl: item.download_url,
+      sha: item.sha,
+    };
+  }
+
+  /**
    * 레포지토리 콘텐츠를 분석하여 블로그 포스트 요약 정보를 생성합니다
    * @param content - GitHub 레포지토리 콘텐츠
    * @returns 분석된 블로그 포스트 요약 정보
@@ -65,6 +114,7 @@ class GitHubApiService {
       return {
         totalPosts: 0,
         markdownFiles: [],
+        blogPosts: [],
         otherFiles: [],
       };
     }
@@ -82,9 +132,25 @@ class GitHubApiService {
           !file.name.endsWith(".md") && !file.name.endsWith(".markdown"),
       );
 
+      // 마크다운 파일들을 BlogPost로 변환하고 날짜순 정렬
+      const blogPosts = markdownFiles
+        .map((file) => this.convertToBlogPost(file))
+        .sort((a, b) => {
+          // 발행 날짜가 있는 경우 날짜순으로 정렬 (최신순)
+          if (a.publishedDate && b.publishedDate) {
+            return (
+              new Date(b.publishedDate).getTime() -
+              new Date(a.publishedDate).getTime()
+            );
+          }
+          // 발행 날짜가 없는 경우 파일명으로 정렬
+          return b.fileName.localeCompare(a.fileName);
+        });
+
       return {
         totalPosts: markdownFiles.length,
         markdownFiles,
+        blogPosts,
         otherFiles,
         lastUpdated: new Date().toISOString(),
       };
@@ -103,9 +169,22 @@ class GitHubApiService {
           !file.name.endsWith(".md") && !file.name.endsWith(".markdown"),
       );
 
+      const blogPosts = markdownFiles
+        .map((file) => this.convertToBlogPost(file))
+        .sort((a, b) => {
+          if (a.publishedDate && b.publishedDate) {
+            return (
+              new Date(b.publishedDate).getTime() -
+              new Date(a.publishedDate).getTime()
+            );
+          }
+          return b.fileName.localeCompare(a.fileName);
+        });
+
       return {
         totalPosts: markdownFiles.length,
         markdownFiles,
+        blogPosts,
         otherFiles,
         lastUpdated: new Date().toISOString(),
       };
@@ -117,9 +196,13 @@ class GitHubApiService {
       const isMarkdown =
         fileContent.name.endsWith(".md") ||
         fileContent.name.endsWith(".markdown");
+
+      const blogPosts = isMarkdown ? [this.convertToBlogPost(fileContent)] : [];
+
       return {
         totalPosts: isMarkdown ? 1 : 0,
         markdownFiles: isMarkdown ? [fileContent] : [],
+        blogPosts,
         otherFiles: isMarkdown ? [] : [fileContent],
         lastUpdated: new Date().toISOString(),
       };
@@ -128,6 +211,7 @@ class GitHubApiService {
     return {
       totalPosts: 0,
       markdownFiles: [],
+      blogPosts: [],
       otherFiles: [],
     };
   }
