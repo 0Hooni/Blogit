@@ -1,4 +1,5 @@
 import { PostCountCard } from "@/src/components/PostCountCard";
+import RepositoryInfoView from "@/src/components/RepositoryInfoView";
 import { ThemedIcon } from "@/src/components/ThemedIcon";
 import { textStyle } from "@/styles/textStyle";
 import { styled } from "styled-components/native";
@@ -95,21 +96,7 @@ export default function HomeScreen() {
       <SectionContainer>
         <SectionTitle>{"Repository Status"}</SectionTitle>
 
-        <SectionContent>
-          <SectionIcon>
-            <ThemedIcon
-              name="git-branch-outline"
-              size={24}
-              variant="foreground"
-            />
-          </SectionIcon>
-          <SectionItem>
-            <SectionItemTitle>{"Repository name"}</SectionItemTitle>
-            <SectionItemContent>
-              {"Last updated 2 hours ago"}
-            </SectionItemContent>
-          </SectionItem>
-        </SectionContent>
+        <RepositoryInfoView />
       </SectionContainer>
 
       <SectionContainer>
