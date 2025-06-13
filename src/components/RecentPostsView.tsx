@@ -1,13 +1,14 @@
 import { textStyle } from "@/styles/textStyle";
 import styled from "styled-components/native";
 import { useBlogPostsSummary } from "../hooks/useGitHubQuery";
+import { getRelativeTime } from "../lib/timeUtils";
 import { ThemedIcon } from "./ThemedIcon";
 
 const Container = styled.View`
-  flex: 1;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
+  width: 100%;
 `;
 
 const PostContainer = styled.View`
@@ -31,9 +32,13 @@ const PostIcon = styled.View`
 const PostContent = styled.View`
   flex-direction: column;
   align-items: flex-start;
+  flex: 1;
 `;
 
-const PostTitle = styled.Text`
+const PostTitle = styled.Text.attrs({
+  numberOfLines: 1,
+  ellipsizeMode: "tail",
+})`
   ${textStyle("body1")};
   color: ${({ theme }) => theme.colors.foreground};
 `;
@@ -44,14 +49,61 @@ const PostDescription = styled.Text`
 `;
 
 const RecentPostsView = () => {
-  const { data: blogPostsSummary } = useBlogPostsSummary();
+  const { data: blogPostsSummary, isLoading, error } = useBlogPostsSummary();
 
-  const recentPosts = blogPostsSummary?.markdownFiles.slice(0, 3);
+  // 최신 포스트 3개 가져오기 (이미 날짜순으로 정렬됨)
+  const recentPosts = blogPostsSummary?.blogPosts.slice(0, 3) || [];
+
+  const getPublishedDateText = (publishedDate?: string) => {
+    if (!publishedDate) return "Date unknown";
+
+    const relativeTime = getRelativeTime(publishedDate);
+    return `Published ${relativeTime}`;
+  };
+
+  if (isLoading) {
+    return (
+      <Container>
+        <PostContainer>
+          <PostContent>
+            <PostTitle>Loading recent posts...</PostTitle>
+          </PostContent>
+        </PostContainer>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container>
+        <PostContainer>
+          <PostContent>
+            <PostTitle>Failed to load posts</PostTitle>
+          </PostContent>
+        </PostContainer>
+      </Container>
+    );
+  }
+
+  if (recentPosts.length === 0) {
+    return (
+      <Container>
+        <PostContainer>
+          <PostContent>
+            <PostTitle>No posts found</PostTitle>
+            <PostDescription>
+              Start writing your first blog post!
+            </PostDescription>
+          </PostContent>
+        </PostContainer>
+      </Container>
+    );
+  }
 
   return (
     <Container>
-      {recentPosts?.map((post) => (
-        <PostContainer key={post.path}>
+      {recentPosts.map((post) => (
+        <PostContainer key={post.id}>
           <PostIcon>
             <ThemedIcon
               name="document-text-outline"
@@ -60,8 +112,10 @@ const RecentPostsView = () => {
             />
           </PostIcon>
           <PostContent>
-            <PostTitle>{post.name}</PostTitle>
-            <PostDescription>{"Published 2 min ago"}</PostDescription>
+            <PostTitle>{post.title}</PostTitle>
+            <PostDescription>
+              {getPublishedDateText(post.publishedDate)}
+            </PostDescription>
           </PostContent>
         </PostContainer>
       ))}

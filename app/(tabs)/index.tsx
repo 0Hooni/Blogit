@@ -1,14 +1,19 @@
 import { PostCountCard } from "@/src/components/PostCountCard";
+import RecentPostsView from "@/src/components/RecentPostsView";
 import RepositoryInfoView from "@/src/components/RepositoryInfoView";
 import { ThemedIcon } from "@/src/components/ThemedIcon";
 import { textStyle } from "@/styles/textStyle";
+import { ScrollView } from "react-native";
 import { styled } from "styled-components/native";
 
-const Container = styled.View`
+const Container = styled(ScrollView)`
   flex: 1;
+  background-color: ${({ theme }) => theme.colors.background};
+`;
+
+const ContentWrapper = styled.View`
   justify-content: flex-start;
   align-items: center;
-  background-color: ${({ theme }) => theme.colors.background};
   padding: 20px 0px;
 `;
 
@@ -84,69 +89,59 @@ const SectionItemContent = styled.Text`
 
 export default function HomeScreen() {
   return (
-    <Container>
-      <CardSection>
-        <PostCountCard />
-        <CardView>
-          <CardTitle>{"Comments"}</CardTitle>
-          <CardContent>{"23"}</CardContent>
-        </CardView>
-      </CardSection>
+    <Container showsVerticalScrollIndicator={false}>
+      <ContentWrapper>
+        <CardSection>
+          <PostCountCard />
+          <CardView>
+            <CardTitle>{"Comments"}</CardTitle>
+            <CardContent>{"23"}</CardContent>
+          </CardView>
+        </CardSection>
 
-      <SectionContainer>
-        <SectionTitle>{"Repository Status"}</SectionTitle>
+        <SectionContainer>
+          <SectionTitle>{"Repository Status"}</SectionTitle>
 
-        <RepositoryInfoView />
-      </SectionContainer>
+          <RepositoryInfoView />
+        </SectionContainer>
 
-      <SectionContainer>
-        <SectionTitle>{"Recent Posts"}</SectionTitle>
+        <SectionContainer>
+          <SectionTitle>{"Recent Posts"}</SectionTitle>
 
-        <SectionContent>
-          <SectionIcon>
-            <ThemedIcon
-              name="document-text-outline"
-              size={24}
-              variant="foreground"
-            />
-          </SectionIcon>
-          <SectionItem>
-            <SectionItemTitle>{"Post Title"}</SectionItemTitle>
-            <SectionItemContent>{"Published 2 min ago"}</SectionItemContent>
-          </SectionItem>
-        </SectionContent>
-      </SectionContainer>
+          <RecentPostsView />
+        </SectionContainer>
 
-      <SectionContainer>
-        <SectionTitle>{"Recent Comments"}</SectionTitle>
+        <SectionContainer>
+          <SectionTitle>{"Recent Comments"}</SectionTitle>
 
-        <SectionContent>
-          <SectionIcon>
-            <ThemedIcon
-              name="chatbubble-ellipses-outline"
-              size={24}
-              variant="foreground"
-            />
-          </SectionIcon>
-          <SectionItem>
-            <SectionItemTitle>{"Comment content"}</SectionItemTitle>
-            <SectionItemContent>{"Commented now"}</SectionItemContent>
-          </SectionItem>
-        </SectionContent>
-        <SectionContent>
-          <SectionIcon>
-            <ThemedIcon
-              name="chatbubble-ellipses-outline"
-              size={24}
-              variant="foreground"
-            />
-          </SectionIcon>
-          <SectionItem>
-            <SectionItemTitle>{"Comment content"}</SectionItemTitle>
-            <SectionItemContent>{"Commented now"}</SectionItemContent>
-          </SectionItem>
-        </SectionContent>
-      </SectionContainer>
+          <SectionContent>
+            <SectionIcon>
+              <ThemedIcon
+                name="chatbubble-ellipses-outline"
+                size={24}
+                variant="foreground"
+              />
+            </SectionIcon>
+            <SectionItem>
+              <SectionItemTitle>{"Comment content"}</SectionItemTitle>
+              <SectionItemContent>{"Commented now"}</SectionItemContent>
+            </SectionItem>
+          </SectionContent>
+          <SectionContent>
+            <SectionIcon>
+              <ThemedIcon
+                name="chatbubble-ellipses-outline"
+                size={24}
+                variant="foreground"
+              />
+            </SectionIcon>
+            <SectionItem>
+              <SectionItemTitle>{"Comment content"}</SectionItemTitle>
+              <SectionItemContent>{"Commented now"}</SectionItemContent>
+            </SectionItem>
+          </SectionContent>
+        </SectionContainer>
+      </ContentWrapper>
     </Container>
   );
 }
