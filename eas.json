@@ -9,7 +9,12 @@
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal"
+      "developmentClient": false,
+      "distribution": "internal",
+      "ios": {
+        "simulator": false
+      },
+      "android": {}
     },
     "production": {
       "autoIncrement": true
