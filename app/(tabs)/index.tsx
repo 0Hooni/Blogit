@@ -1,7 +1,7 @@
 import { PostCountCard } from "@/src/components/PostCountCard";
+import RecentCommentsView from "@/src/components/RecentCommentsView";
 import RecentPostsView from "@/src/components/RecentPostsView";
 import RepositoryInfoView from "@/src/components/RepositoryInfoView";
-import { ThemedIcon } from "@/src/components/ThemedIcon";
 import { textStyle } from "@/styles/textStyle";
 import { ScrollView } from "react-native";
 import { styled } from "styled-components/native";
@@ -114,32 +114,7 @@ export default function HomeScreen() {
         <SectionContainer>
           <SectionTitle>{"Recent Comments"}</SectionTitle>
 
-          <SectionContent>
-            <SectionIcon>
-              <ThemedIcon
-                name="chatbubble-ellipses-outline"
-                size={24}
-                variant="foreground"
-              />
-            </SectionIcon>
-            <SectionItem>
-              <SectionItemTitle>{"Comment content"}</SectionItemTitle>
-              <SectionItemContent>{"Commented now"}</SectionItemContent>
-            </SectionItem>
-          </SectionContent>
-          <SectionContent>
-            <SectionIcon>
-              <ThemedIcon
-                name="chatbubble-ellipses-outline"
-                size={24}
-                variant="foreground"
-              />
-            </SectionIcon>
-            <SectionItem>
-              <SectionItemTitle>{"Comment content"}</SectionItemTitle>
-              <SectionItemContent>{"Commented now"}</SectionItemContent>
-            </SectionItem>
-          </SectionContent>
+          <RecentCommentsView />
         </SectionContainer>
       </ContentWrapper>
     </Container>
