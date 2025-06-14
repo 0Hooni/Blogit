@@ -37,10 +37,19 @@ export function AuthProvider({ children }: AuthContextProps) {
 
   const { signInWithGitHub, signOut: githubSignOut } = useGitHubAuth();
 
-  const handleTokenExpired = useCallback(async () => {
-    await githubSignOut();
-    router.replace("/login");
+  const signOut = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await githubSignOut();
+      router.replace("/login");
+    } finally {
+      setIsLoading(false);
+    }
   }, [githubSignOut]);
+
+  const handleTokenExpired = useCallback(async () => {
+    await signOut();
+  }, [signOut]);
 
   useEffect(() => {
     setTokenExpiredHandler(handleTokenExpired);
@@ -65,17 +74,6 @@ export function AuthProvider({ children }: AuthContextProps) {
     try {
       await signInWithGitHub();
       router.replace("/");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const signOut = async () => {
-    setIsLoading(true);
-
-    try {
-      await githubSignOut();
-      router.replace("/login");
     } finally {
       setIsLoading(false);
     }
