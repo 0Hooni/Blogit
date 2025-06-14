@@ -22,10 +22,10 @@ class GitHubApiService {
    * @returns 블로그 포스트 목록
    */
   async getBlogPosts(
-    user: GitHubUser,
+    userLogin: string,
     path: string = "_posts",
   ): Promise<GitHubRepositoryContent> {
-    const endpoint = DynamicEndpoint.buildBlogPostsEndpoint(user.login, path);
+    const endpoint = DynamicEndpoint.buildBlogPostsEndpoint(userLogin, path);
 
     const response = await httpClient.get(endpoint);
     return response.data;
@@ -37,10 +37,10 @@ class GitHubApiService {
    * @returns 블로그 포스트 요약 정보
    */
   async getBlogPostSummary(
-    user: GitHubUser,
+    userLogin: string,
     path: string = "_posts",
   ): Promise<BlogPostSummary> {
-    const content = await this.getBlogPosts(user, path);
+    const content = await this.getBlogPosts(userLogin, path);
     return this.analyzeBlogContent(content);
   }
 
