@@ -1,5 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { styled } from "styled-components/native";
+import styled from "styled-components/native";
 
 export const ThemedIcon = styled(Ionicons).attrs<{
   variant?:

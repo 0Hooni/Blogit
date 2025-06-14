@@ -5,7 +5,7 @@ import RecentPostsView from "@/src/components/RecentPostsView";
 import RepositoryInfoView from "@/src/components/RepositoryInfoView";
 import { textStyle } from "@/styles/textStyle";
 import { ScrollView } from "react-native";
-import { styled } from "styled-components/native";
+import styled from "styled-components/native";
 
 const Container = styled(ScrollView)`
   flex: 1;

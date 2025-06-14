@@ -2,7 +2,7 @@ import { ThemedIcon } from "@/src/components/ThemedIcon";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { textStyle } from "@/src/styles/textStyle";
 import { Redirect } from "expo-router";
-import { styled } from "styled-components/native";
+import styled from "styled-components/native";
 
 const Container = styled.View`
   flex: 1;
