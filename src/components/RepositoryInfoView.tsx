@@ -46,7 +46,7 @@ const RepositoryInfoView = () => {
     data: repository,
     isLoading,
     error,
-  } = useRepositoryInfo(user?.login || "", repositoryName);
+  } = useRepositoryInfo(user?.login ?? "", repositoryName);
 
   // 마지막 업데이트 시간 계산
   const getLastUpdatedText = () => {
