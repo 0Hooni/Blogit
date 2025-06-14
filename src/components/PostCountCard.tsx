@@ -27,7 +27,7 @@ export const PostCountCard = () => {
   return (
     <CardView>
       <CardTitle>{"Posts"}</CardTitle>
-      <CardContent>{summary?.totalPosts}</CardContent>
+      <CardContent>{summary?.totalPosts ?? "-"}</CardContent>
     </CardView>
   );
 };

@@ -27,7 +27,7 @@ export const CommentCountCard = () => {
   return (
     <CardView>
       <CardTitle>{"Comments"}</CardTitle>
-      <CardContent>{comments?.length}</CardContent>
+      <CardContent>{comments?.length ?? "-"}</CardContent>
     </CardView>
   );
 };
