@@ -1,4 +1,6 @@
+import { ThemedIcon } from "@/src/components/ThemedIcon";
 import { useAuth } from "@/src/contexts/AuthContext";
+import { textStyle } from "@/src/styles/textStyle";
 import { Redirect } from "expo-router";
 import styled from "styled-components/native";
 
@@ -12,22 +14,20 @@ const LogoImage = styled.Image`
   width: 192px;
   height: 192px;
   border-radius: 48px;
+  background-color: ${({ theme }) => theme.colors.foreground};
+  tint-color: ${({ theme }) => theme.colors.background};
 `;
 
 const Title = styled.Text`
-  font-weight: bold;
-  font-size: 28px;
-  line-height: 36px;
-  color: #141414;
+  color: ${({ theme }) => theme.colors.foreground};
+  ${textStyle("display")}
   margin-top: 80px;
 `;
 
 const SubTitle = styled.Text`
-  font-weight: normal;
-  font-size: 16px;
-  line-height: 24px;
   text-align: center;
-  color: #141414;
+  color: ${({ theme }) => theme.colors.mutedForeground};
+  ${textStyle("body1")}
   margin-top: 60px;
 `;
 
@@ -38,20 +38,13 @@ const GitHubButton = styled.TouchableOpacity`
   gap: 12px;
   padding: 12px 20px;
   border-radius: 24px;
-  background-color: #030213;
+  background-color: ${({ theme }) => theme.colors.primary};
   margin-top: 100px;
 `;
 
-const GithubCatImage = styled.Image`
-  width: 24px;
-  height: 24px;
-`;
-
 const GitHubButtonText = styled.Text`
-  font-weight: bold;
-  font-size: 16px;
-  line-height: 24px;
-  color: #fafafa;
+  ${textStyle("button1")}
+  color: ${({ theme }) => theme.colors.primaryForeground};
 `;
 
 export default function LoginScreen() {
@@ -69,7 +62,7 @@ export default function LoginScreen() {
 
   return (
     <Container>
-      <LogoImage source={require("@/assets/images/base/icon.png")} />
+      <LogoImage source={require("@/assets/images/base/adaptive-icon.png")} />
       <Title>Blogit</Title>
       <SubTitle>
         {"GitHub Pages 블로그의 모든 것을\n모바일에서 손쉽게 관리하세요"}
@@ -79,9 +72,7 @@ export default function LoginScreen() {
         disabled={isLoading}
         activeOpacity={0.8}
       >
-        <GithubCatImage
-          source={require("@/assets/images/icon/github-cat/github-cat.png")}
-        />
+        <ThemedIcon name="logo-github" size={24} variant="primaryForeground" />
         <GitHubButtonText>GitHub 계정으로 로그인하기</GitHubButtonText>
       </GitHubButton>
     </Container>

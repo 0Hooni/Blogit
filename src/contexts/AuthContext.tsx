@@ -1,10 +1,12 @@
 import { auth } from "@/firebaseConfig";
 import { useGitHubAuth } from "@/src/hooks/useGitHubAuth";
+import { setTokenExpiredHandler } from "@/src/services/httpClient";
 import { router, SplashScreen } from "expo-router";
 import { User as FirebaseUser, onAuthStateChanged } from "firebase/auth";
 import {
   createContext,
   ReactNode,
+  useCallback,
   useContext,
   useEffect,
   useState,
@@ -35,6 +37,28 @@ export function AuthProvider({ children }: AuthContextProps) {
 
   const { signInWithGitHub, signOut: githubSignOut } = useGitHubAuth();
 
+  const signOut = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await githubSignOut();
+      router.replace("/login");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [githubSignOut]);
+
+  const handleTokenExpired = useCallback(async () => {
+    await signOut();
+  }, [signOut]);
+
+  useEffect(() => {
+    setTokenExpiredHandler(handleTokenExpired);
+
+    return () => {
+      setTokenExpiredHandler(null);
+    };
+  }, [handleTokenExpired]);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
@@ -50,17 +74,6 @@ export function AuthProvider({ children }: AuthContextProps) {
     try {
       await signInWithGitHub();
       router.replace("/");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const signOut = async () => {
-    setIsLoading(true);
-
-    try {
-      await githubSignOut();
-      router.replace("/login");
     } finally {
       setIsLoading(false);
     }
