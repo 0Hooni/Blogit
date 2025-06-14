@@ -52,13 +52,19 @@ const RecentCommentsView = () => {
   const { data: commentsSummary, isLoading, error } = useIssueCommentsSummary();
 
   // 최신 포스트 3개 가져오기 (이미 날짜순으로 정렬됨)
-  const recentComments = commentsSummary?.slice(0, 3) || [];
+  const recentComments =
+    commentsSummary
+      ?.sort(
+        (a, b) =>
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+      )
+      .slice(0, 3) || [];
 
   const getPublishedDateText = (publishedDate?: string) => {
     if (!publishedDate) return "Date unknown";
 
     const relativeTime = getRelativeTime(publishedDate);
-    return `Published ${relativeTime}`;
+    return `Commented ${relativeTime}`;
   };
 
   if (isLoading) {
