@@ -53,7 +53,7 @@ export const useBlogPosts = (path: string = "_posts") => {
 
   return useQuery({
     queryKey: GITHUB_QUERY_KEY.REPOSITORY.BLOG_POSTS(user?.login || "", path),
-    queryFn: () => githubApiService.getBlogPosts(path),
+    queryFn: () => githubApiService.getBlogPosts(user?.login || "", path),
     enabled: !!user?.login, // 사용자 정보가 있는 경우에만 쿼리 실행
     staleTime: 2 * 60 * 1000,
     gcTime: 5 * 60 * 1000,
@@ -71,7 +71,7 @@ export const useBlogPostsSummary = (path: string = "_posts") => {
       user?.login || "",
       path,
     ),
-    queryFn: () => githubApiService.getBlogPostSummary(path),
+    queryFn: () => githubApiService.getBlogPostSummary(user?.login || "", path),
     enabled: !!user?.login,
     staleTime: 2 * 60 * 1000,
     gcTime: 5 * 60 * 1000,
@@ -103,7 +103,7 @@ export const useIssueCommentsSummary = () => {
 
   return useQuery({
     queryKey: GITHUB_QUERY_KEY.ISSUE.COMMENTS(user?.login || ""),
-    queryFn: () => githubApiService.getIssueCommentsSummary(),
+    queryFn: () => githubApiService.getIssueCommentsSummary(user?.login || ""),
     enabled: !!user?.login,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,

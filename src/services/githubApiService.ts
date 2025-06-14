@@ -22,9 +22,9 @@ class GitHubApiService {
    * @returns 블로그 포스트 목록
    */
   async getBlogPosts(
+    user: GitHubUser,
     path: string = "_posts",
   ): Promise<GitHubRepositoryContent> {
-    const user = await this.getCurrentUser();
     const endpoint = DynamicEndpoint.buildBlogPostsEndpoint(user.login, path);
 
     const response = await httpClient.get(endpoint);
@@ -36,8 +36,11 @@ class GitHubApiService {
    * @param path - 디렉토리 경로 (기본값: "_posts")
    * @returns 블로그 포스트 요약 정보
    */
-  async getBlogPostSummary(path: string = "_posts"): Promise<BlogPostSummary> {
-    const content = await this.getBlogPosts(path);
+  async getBlogPostSummary(
+    user: GitHubUser,
+    path: string = "_posts",
+  ): Promise<BlogPostSummary> {
+    const content = await this.getBlogPosts(user, path);
     return this.analyzeBlogContent(content);
   }
 
@@ -58,26 +61,22 @@ class GitHubApiService {
 
   /**
    * 이슈 댓글을 가져옵니다
-   * @param owner - Repository 소유자 (사용자명)
-   * @param repo - Repository 이름
+   * @param userLogin - Repository 소유자 (사용자명)
    * @returns 이슈 댓글
    */
-  async getIssueComments(): Promise<IssueCommentsResponse> {
-    const user = await this.getCurrentUser();
-
-    const endpoint = DynamicEndpoint.buildIssueCommentsEndpoint(user.login);
+  async getIssueComments(userLogin: string): Promise<IssueCommentsResponse> {
+    const endpoint = DynamicEndpoint.buildIssueCommentsEndpoint(userLogin);
     const response = await httpClient.get(endpoint);
     return response.data;
   }
 
   /**
    * 이슈 댓글 요약 정보를 가져옵니다
-   * @param owner - Repository 소유자 (사용자명)
-   * @param repo - Repository 이름
+   * @param userLogin - Repository 소유자 (사용자명)
    * @returns 이슈 댓글 요약 정보
    */
-  async getIssueCommentsSummary(): Promise<CommentEntity[]> {
-    const comments = await this.getIssueComments();
+  async getIssueCommentsSummary(userLogin: string): Promise<CommentEntity[]> {
+    const comments = await this.getIssueComments(userLogin);
     return this.analyzeIssueComments(comments);
   }
 
