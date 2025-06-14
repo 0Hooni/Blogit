@@ -22,40 +22,27 @@ export default function TabsLayout() {
 
   if (!user) return <Redirect href="/login" />;
 
+  const selectedTheme = scheme === "dark" ? theme.dark : theme.light;
+
   return (
-    <ThemeProvider theme={scheme === "dark" ? theme.dark : theme.light}>
+    <ThemeProvider theme={selectedTheme}>
       <AppContainer>
         <Tabs
           screenOptions={{
             headerShown: true,
             headerShadowVisible: false,
             headerStyle: {
-              backgroundColor:
-                scheme === "dark"
-                  ? theme.dark.colors.background
-                  : theme.light.colors.background,
+              backgroundColor: selectedTheme.colors.background,
             },
             headerTitleAlign: "left",
-            headerTintColor:
-              scheme === "dark"
-                ? theme.dark.colors.foreground
-                : theme.light.colors.foreground,
+            headerTintColor: selectedTheme.colors.foreground,
             headerTitleStyle: textStyleObject("display"),
             tabBarStyle: {
-              backgroundColor:
-                scheme === "dark"
-                  ? theme.dark.colors.background
-                  : theme.light.colors.background,
+              backgroundColor: selectedTheme.colors.background,
               borderTopWidth: 0,
             },
-            tabBarActiveTintColor:
-              scheme === "dark"
-                ? theme.dark.colors.foreground
-                : theme.light.colors.foreground,
-            tabBarInactiveTintColor:
-              scheme === "dark"
-                ? theme.dark.colors.mutedForeground
-                : theme.light.colors.mutedForeground,
+            tabBarActiveTintColor: selectedTheme.colors.foreground,
+            tabBarInactiveTintColor: selectedTheme.colors.mutedForeground,
             tabBarShowLabel: false,
           }}
         >
