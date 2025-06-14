@@ -28,8 +28,14 @@ export const GITHUB_QUERY_KEY = {
       repo,
     ],
   },
+  ISSUE: {
+    COMMENTS: (owner: string) => ["github", "issue", "comments", owner],
+  },
 };
 
+/**
+ * 현재 사용자 정보를 가져오는 훅
+ */
 export const useCurrentUser = () => {
   return useQuery({
     queryKey: GITHUB_QUERY_KEY.USER.CURRENT,
@@ -40,7 +46,7 @@ export const useCurrentUser = () => {
 };
 
 /**
- * 현재 사용자의 블로그 포스트를 가져오는 훅
+ * 현재 사용자의 블로그 포스트를 가져오는 훅 (블로그 포스트 목록)
  */
 export const useBlogPosts = (path: string = "_posts") => {
   const { data: user } = useCurrentUser();
@@ -55,7 +61,7 @@ export const useBlogPosts = (path: string = "_posts") => {
 };
 
 /**
- * 현재 사용자의 블로그 포스트 요약 정보를 가져오는 훅 (포스팅 개수 포함)
+ * 현재 사용자의 블로그 포스트 요약 정보를 가져오는 훅 (포스팅 개수, 블로그 포스트 요약 정보 포함)
  */
 export const useBlogPostsSummary = (path: string = "_posts") => {
   const { data: user } = useCurrentUser();
@@ -84,5 +90,22 @@ export const useRepositoryInfo = (owner: string, repo: string) => {
     enabled: !!owner && !!repo, // owner와 repo가 있을 때만 실행
     staleTime: 5 * 60 * 1000, // 5분간 캐시 유지
     gcTime: 10 * 60 * 1000, // 10분간 가비지 컬렉션 지연
+  });
+};
+
+/**
+ * 이슈 댓글 요약 정보를 가져오는 훅
+ * @param owner - Repository 소유자 (사용자명)
+ * @param repo - Repository 이름
+ */
+export const useIssueCommentsSummary = () => {
+  const { data: user } = useCurrentUser();
+
+  return useQuery({
+    queryKey: GITHUB_QUERY_KEY.ISSUE.COMMENTS(user?.login || ""),
+    queryFn: () => githubApiService.getIssueCommentsSummary(),
+    enabled: !!user?.login,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 };

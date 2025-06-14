@@ -1,9 +1,11 @@
 import type {
   BlogPost,
   BlogPostSummary,
+  CommentEntity,
   GitHubRepository,
   GitHubRepositoryContent,
   GitHubUser,
+  IssueCommentsResponse,
 } from "@/src/types/github";
 import { DynamicEndpoint, GITHUB_API_ENDPOINT } from "./apiEndpoint";
 import httpClient from "./httpClient";
@@ -52,6 +54,31 @@ class GitHubApiService {
     const endpoint = DynamicEndpoint.buildRepositoryEndpoint(owner, repo);
     const response = await httpClient.get(endpoint);
     return response.data;
+  }
+
+  /**
+   * 이슈 댓글을 가져옵니다
+   * @param owner - Repository 소유자 (사용자명)
+   * @param repo - Repository 이름
+   * @returns 이슈 댓글
+   */
+  async getIssueComments(): Promise<IssueCommentsResponse> {
+    const user = await this.getCurrentUser();
+
+    const endpoint = DynamicEndpoint.buildIssueCommentsEndpoint(user.login);
+    const response = await httpClient.get(endpoint);
+    return response.data;
+  }
+
+  /**
+   * 이슈 댓글 요약 정보를 가져옵니다
+   * @param owner - Repository 소유자 (사용자명)
+   * @param repo - Repository 이름
+   * @returns 이슈 댓글 요약 정보
+   */
+  async getIssueCommentsSummary(): Promise<CommentEntity[]> {
+    const comments = await this.getIssueComments();
+    return this.analyzeIssueComments(comments);
   }
 
   /**
@@ -214,6 +241,23 @@ class GitHubApiService {
       blogPosts: [],
       otherFiles: [],
     };
+  }
+
+  /**
+   * 이슈 댓글을 분석하여 요약 정보를 생성합니다
+   * @param comments - 이슈 댓글
+   * @returns 분석된 이슈 댓글 요약 정보
+   */
+  private analyzeIssueComments(
+    comments: IssueCommentsResponse,
+  ): CommentEntity[] {
+    return comments.map((comment) => ({
+      id: comment.id,
+      body: comment.body,
+      user: comment.user,
+      issue_number: Number(comment.issue_url.split("/").pop()),
+      created_at: comment.created_at,
+    }));
   }
 }
 

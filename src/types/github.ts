@@ -187,10 +187,12 @@ export type IssueCommentsResponse = IssueComment[];
 
 // Comment Entity 타입
 export interface CommentEntity {
+  id: number;
   body: string;
   user: {
     login: string;
     avatar_url: string;
   };
   issue_number: number;
+  created_at: string;
 }

@@ -6,6 +6,9 @@ export const GITHUB_API_ENDPOINT = {
     CONTENTS: "/repos/{owner}/{repo}/contents/{path}",
     REPOSITORY: "/repos/{owner}/{repo}",
   },
+  ISSUE: {
+    COMMENTS: "/repos/{owner}/{repo}/issues/comments",
+  },
 };
 
 interface EndpointParams {
@@ -61,6 +64,14 @@ export class DynamicEndpoint {
       owner,
       repo,
       path: "", // path는 사용하지 않지만 타입을 위해 빈 문자열 전달
+    });
+  }
+
+  static buildIssueCommentsEndpoint(owner: string): string {
+    return this.build(GITHUB_API_ENDPOINT.ISSUE.COMMENTS, {
+      owner,
+      repo: `${owner}.github.io`,
+      path: "",
     });
   }
 }
