@@ -14,7 +14,7 @@ export const GITHUB_API_ENDPOINT = {
 interface EndpointParams {
   owner: string;
   repo: string;
-  path: string;
+  path?: string;
 }
 
 export class DynamicEndpoint {
@@ -32,6 +32,9 @@ export class DynamicEndpoint {
         endpoint = endpoint.replace(`{${key}}`, value);
       }
     });
+
+    // path가 optional일 때 템플릿에 남아있는 {path}를 빈 문자열로 대체
+    endpoint = endpoint.replace(/\{path\}/g, "");
 
     return endpoint;
   }
@@ -63,7 +66,6 @@ export class DynamicEndpoint {
     return this.build(GITHUB_API_ENDPOINT.REPOSITORY.REPOSITORY, {
       owner,
       repo,
-      path: "", // path는 사용하지 않지만 타입을 위해 빈 문자열 전달
     });
   }
 
@@ -71,7 +73,6 @@ export class DynamicEndpoint {
     return this.build(GITHUB_API_ENDPOINT.ISSUE.COMMENTS, {
       owner,
       repo: `${owner}.github.io`,
-      path: "",
     });
   }
 }
