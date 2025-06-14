@@ -1,3 +1,4 @@
+// GitHub User 타입
 export interface GitHubUser {
   id: number;
   login: string;
@@ -17,12 +18,14 @@ export interface GitHubUser {
   html_url: string;
 }
 
+// GitHub Content Links 타입
 export interface GitHubContentLinks {
   git: string | null;
   html: string | null;
   self: string;
 }
 
+// GitHub Content Item 타입
 export interface GitHubContentItem {
   type: string;
   size: number;
@@ -36,6 +39,7 @@ export interface GitHubContentItem {
   _links: GitHubContentLinks;
 }
 
+// GitHub Repository Content 타입
 export interface GitHubRepositoryContent {
   type: string;
   size: number;
@@ -65,6 +69,7 @@ export interface BlogPost {
   sha: string;
 }
 
+// Blog Post Summary 타입
 export interface BlogPostSummary {
   totalPosts: number;
   markdownFiles: GitHubContentItem[];
@@ -113,4 +118,79 @@ export interface GitHubRepository {
   open_issues: number;
   watchers: number;
   default_branch: string;
+}
+
+// Reactions 타입
+export interface Reactions {
+  url: string;
+  total_count: number;
+  "+1": number;
+  "-1": number;
+  laugh: number;
+  hooray: number;
+  confused: number;
+  heart: number;
+  rocket: number;
+  eyes: number;
+}
+
+// GitHub App Permissions 타입
+export interface GitHubAppPermissions {
+  issues: "read" | "write";
+  metadata: "read" | "write";
+  [key: string]: string; // 다른 권한들을 위한 인덱스 시그니처
+}
+
+// GitHub App 타입
+export interface GitHubApp {
+  id: number;
+  client_id: string;
+  slug: string;
+  node_id: string;
+  owner: GitHubUser;
+  name: string;
+  description: string;
+  external_url: string;
+  html_url: string;
+  created_at: string;
+  updated_at: string;
+  permissions: GitHubAppPermissions;
+  events: string[];
+}
+
+// 메인 Issue Comment 타입
+export interface IssueComment {
+  url: string;
+  html_url: string;
+  issue_url: string;
+  id: number;
+  node_id: string;
+  user: GitHubUser;
+  created_at: string;
+  updated_at: string;
+  author_association:
+    | "COLLABORATOR"
+    | "CONTRIBUTOR"
+    | "FIRST_TIMER"
+    | "FIRST_TIME_CONTRIBUTOR"
+    | "MANNEQUIN"
+    | "MEMBER"
+    | "NONE"
+    | "OWNER";
+  body: string;
+  reactions: Reactions;
+  performed_via_github_app: GitHubApp;
+}
+
+// 배열 형태의 응답 타입
+export type IssueCommentsResponse = IssueComment[];
+
+// Comment Entity 타입
+export interface CommentEntity {
+  body: string;
+  user: {
+    login: string;
+    avatar_url: string;
+  };
+  issue_number: number;
 }
