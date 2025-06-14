@@ -1,5 +1,6 @@
 import { useFontLoaded } from "@/src/components/FontLoaders";
 import { useAuth } from "@/src/contexts/AuthContext";
+import { textStyleObject } from "@/src/styles/textStyle";
 import { theme } from "@/src/styles/theme";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Redirect, Tabs } from "expo-router";
@@ -39,11 +40,7 @@ export default function TabsLayout() {
               scheme === "dark"
                 ? theme.dark.colors.foreground
                 : theme.light.colors.foreground,
-            headerTitleStyle: {
-              fontSize: 28,
-              lineHeight: 28 * 1.5,
-              fontWeight: "bold",
-            },
+            headerTitleStyle: textStyleObject("display"),
             tabBarStyle: {
               backgroundColor:
                 scheme === "dark"
