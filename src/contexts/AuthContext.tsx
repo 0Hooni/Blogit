@@ -72,8 +72,10 @@ export function AuthProvider({ children }: AuthContextProps) {
     setIsLoading(true);
 
     try {
-      await signInWithGitHub();
-      router.replace("/");
+      const result = await signInWithGitHub();
+      if (result) {
+        router.replace("/");
+      }
     } finally {
       setIsLoading(false);
     }

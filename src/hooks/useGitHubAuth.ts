@@ -24,7 +24,7 @@ interface GitHubAuthState {
 }
 
 interface UseGitHubAuthReturn extends GitHubAuthState {
-  signInWithGitHub: () => Promise<void>;
+  signInWithGitHub: () => Promise<boolean>;
   signOut: () => Promise<void>;
 }
 
@@ -124,9 +124,10 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
         const credential = GithubAuthProvider.credential(accessToken);
         await signInWithCredential(auth, credential);
 
-        // 상태는 onAuthStateChanged에서 자동 업데이트
+        return true; // 성공 시 true 반환
       } else if (result.type === "cancel") {
         setIsLoading(false);
+        return false; // 취소 시 false 반환
       } else {
         throw new Error("GitHub 인증이 취소되었거나 실패했습니다.");
       }
@@ -142,6 +143,7 @@ export function useGitHubAuth(): UseGitHubAuthReturn {
       Alert.alert("로그인 실패", errorMessage, [
         { text: "확인", style: "default" },
       ]);
+      return false; // 에러 시 false 반환
     }
   }, [promptAsync, getGitHubAccessToken]);
 
