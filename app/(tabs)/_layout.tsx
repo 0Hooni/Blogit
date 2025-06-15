@@ -1,3 +1,4 @@
+import EditorTabbarButton from "@/src/components/EditorTabbarButton";
 import { useFontLoaded } from "@/src/components/FontLoaders";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { textStyleObject } from "@/src/styles/textStyle";
@@ -47,12 +48,25 @@ export default function TabsLayout() {
           }}
         >
           <Tabs.Screen
-            name="index"
+            name="(home)"
             options={{
               title: "홈",
               tabBarIcon: ({ color }) => (
-                <Ionicons name="home" color={color} size={32} />
+                <Ionicons name="home" color={color} size={28} />
               ),
+            }}
+          />
+          <Tabs.Screen
+            name="editor"
+            options={{
+              title: "에디터",
+              tabBarButton: () => <EditorTabbarButton />,
+              tabBarShowLabel: false,
+            }}
+            listeners={{
+              tabPress: (e) => {
+                e.preventDefault();
+              },
             }}
           />
           <Tabs.Screen
@@ -60,7 +74,7 @@ export default function TabsLayout() {
             options={{
               title: "설정",
               tabBarIcon: ({ color }) => (
-                <Ionicons name="settings" color={color} size={32} />
+                <Ionicons name="settings" color={color} size={28} />
               ),
             }}
           />
