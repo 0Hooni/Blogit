@@ -1,11 +1,10 @@
-import EditorTabbarButton from "@/src/components/EditorTabbarButton";
 import { useFontLoaded } from "@/src/components/FontLoaders";
 import { useAuth } from "@/src/contexts/AuthContext";
-import { textStyleObject } from "@/src/styles/textStyle";
 import { theme } from "@/src/styles/theme";
+import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Redirect, Tabs } from "expo-router";
-import { useColorScheme } from "react-native";
+import { Redirect, router, Tabs } from "expo-router";
+import { TouchableOpacity, useColorScheme } from "react-native";
 import { styled, ThemeProvider } from "styled-components/native";
 
 const AppContainer = styled.View`
@@ -30,21 +29,18 @@ export default function TabsLayout() {
       <AppContainer>
         <Tabs
           screenOptions={{
-            headerShown: true,
+            headerShown: false,
             headerShadowVisible: false,
             headerStyle: {
               backgroundColor: selectedTheme.colors.background,
             },
-            headerTitleAlign: "left",
             headerTintColor: selectedTheme.colors.foreground,
-            headerTitleStyle: textStyleObject("display"),
             tabBarStyle: {
               backgroundColor: selectedTheme.colors.background,
               borderTopWidth: 0,
             },
             tabBarActiveTintColor: selectedTheme.colors.foreground,
             tabBarInactiveTintColor: selectedTheme.colors.mutedForeground,
-            tabBarShowLabel: false,
           }}
         >
           <Tabs.Screen
@@ -52,29 +48,24 @@ export default function TabsLayout() {
             options={{
               title: "홈",
               tabBarIcon: ({ color }) => (
-                <Ionicons name="home" color={color} size={28} />
+                <Ionicons name="home" color={color} size={24} />
+              ),
+              headerRight: ({ tintColor }) => (
+                <TouchableOpacity
+                  onPress={() => router.push("/editor")}
+                  style={{ marginRight: 16 }}
+                >
+                  <Entypo name="new-message" size={24} color={tintColor} />
+                </TouchableOpacity>
               ),
             }}
           />
           <Tabs.Screen
-            name="editor"
-            options={{
-              title: "에디터",
-              tabBarButton: () => <EditorTabbarButton />,
-              tabBarShowLabel: false,
-            }}
-            listeners={{
-              tabPress: (e) => {
-                e.preventDefault();
-              },
-            }}
-          />
-          <Tabs.Screen
-            name="setting"
+            name="(setting)"
             options={{
               title: "설정",
               tabBarIcon: ({ color }) => (
-                <Ionicons name="settings" color={color} size={28} />
+                <Ionicons name="settings" color={color} size={24} />
               ),
             }}
           />

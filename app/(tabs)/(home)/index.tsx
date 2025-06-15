@@ -15,7 +15,6 @@ const Container = styled(ScrollView)`
 const ContentWrapper = styled.View`
   justify-content: flex-start;
   align-items: center;
-  padding: 20px 0px;
 `;
 
 const CardSection = styled.View`

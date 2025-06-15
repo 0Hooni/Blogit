@@ -10,13 +10,12 @@ export default function Layout() {
     <Stack
       screenOptions={{
         headerShown: true,
-        headerTitle: "홈",
+        headerTitle: "설정",
         headerShadowVisible: false,
         headerStyle: {
           backgroundColor: selectedTheme.colors.background,
         },
         headerTintColor: selectedTheme.colors.foreground,
-        headerTitleAlign: "left",
       }}
     />
   );
