@@ -1,17 +1,42 @@
 import { textStyle } from "@/src/styles/textStyle";
-import { View } from "react-native";
+import { theme } from "@/src/styles/theme";
+import { Entypo } from "@expo/vector-icons";
+import { router } from "expo-router";
+import { useColorScheme } from "react-native";
 import styled from "styled-components/native";
 
-export const HeaderTitle = styled.Text`
+const Container = styled.View`
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const HeaderTitle = styled.Text`
   ${textStyle("display")}
   height: 44px;
   color: ${({ theme }) => theme.colors.foreground};
 `;
 
+const NewPostButton = styled.TouchableOpacity`
+  size: 24px;
+  justify-content: center;
+`;
+
 export default function HeaderTitleComponent({ title }: { title: string }) {
+  const scheme = useColorScheme();
+  const selectedTheme = scheme === "dark" ? theme.dark : theme.light;
+
   return (
-    <View style={{ flex: 1, alignItems: "flex-start" }}>
+    <Container>
       <HeaderTitle>{title}</HeaderTitle>
-    </View>
+      <NewPostButton onPress={() => router.push("/editor")}>
+        <Entypo
+          name="new-message"
+          size={24}
+          color={selectedTheme.colors.foreground}
+        />
+      </NewPostButton>
+    </Container>
   );
 }
