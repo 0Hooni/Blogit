@@ -1,3 +1,4 @@
+import HeaderTitleComponent from "@/src/components/HeaderTitle";
 import { theme } from "@/src/styles/theme";
 import { Stack } from "expo-router";
 import { useColorScheme } from "react-native";
@@ -10,7 +11,7 @@ export default function Layout() {
     <Stack
       screenOptions={{
         headerShown: true,
-        headerTitle: "홈",
+        headerTitle: () => <HeaderTitleComponent title="Blogit" />,
         headerShadowVisible: false,
         headerStyle: {
           backgroundColor: selectedTheme.colors.background,
