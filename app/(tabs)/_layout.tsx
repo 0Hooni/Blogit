@@ -1,10 +1,9 @@
 import { useFontLoaded } from "@/src/components/FontLoaders";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { theme } from "@/src/styles/theme";
-import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Redirect, router, Tabs } from "expo-router";
-import { TouchableOpacity, useColorScheme } from "react-native";
+import { Redirect, Tabs } from "expo-router";
+import { useColorScheme } from "react-native";
 import { styled, ThemeProvider } from "styled-components/native";
 
 const AppContainer = styled.View`
@@ -49,14 +48,6 @@ export default function TabsLayout() {
               title: "홈",
               tabBarIcon: ({ color }) => (
                 <Ionicons name="home" color={color} size={24} />
-              ),
-              headerRight: ({ tintColor }) => (
-                <TouchableOpacity
-                  onPress={() => router.push("/editor")}
-                  style={{ marginRight: 16 }}
-                >
-                  <Entypo name="new-message" size={24} color={tintColor} />
-                </TouchableOpacity>
               ),
             }}
           />

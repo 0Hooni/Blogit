@@ -3,7 +3,7 @@ import { AuthProvider } from "@/src/contexts/AuthContext";
 import { queryClient } from "@/src/lib/queryClient";
 import { theme } from "@/src/styles/theme";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { Slot } from "expo-router";
+import { Stack } from "expo-router";
 import { useColorScheme } from "react-native";
 import { styled, ThemeProvider } from "styled-components/native";
 
@@ -16,17 +16,39 @@ const AppContainer = styled.View`
 
 export default function RootLayout() {
   const scheme = useColorScheme();
+  const selectedTheme = scheme === "dark" ? theme.dark : theme.light;
 
   const fontsLoaded = useFontLoaded();
 
   if (!fontsLoaded) return null;
 
   return (
-    <ThemeProvider theme={scheme === "dark" ? theme.dark : theme.light}>
+    <ThemeProvider theme={selectedTheme}>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <AppContainer>
-            <Slot />
+            <Stack screenOptions={{ headerShown: false }}>
+              <Stack.Screen
+                name="(tabs)"
+                options={{
+                  headerShown: false,
+                  animation: "none",
+                }}
+              />
+              <Stack.Screen
+                name="editor"
+                options={{
+                  headerShown: true,
+                  headerTitle: "New Post",
+                  headerShadowVisible: false,
+                  headerStyle: {
+                    backgroundColor: selectedTheme.colors.background,
+                  },
+                  headerTintColor: selectedTheme.colors.foreground,
+                  headerBackButtonDisplayMode: "minimal",
+                }}
+              />
+            </Stack>
           </AppContainer>
         </AuthProvider>
       </QueryClientProvider>
