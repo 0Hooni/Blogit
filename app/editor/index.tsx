@@ -20,7 +20,10 @@ const EditorToolbarContainer = styled.View`
 
 const ToolbarIcon = styled.TouchableOpacity`
   size: 24px;
-  tint-color: ${({ theme }) => theme.colors.foreground};
+`;
+
+const StyledMaterialIcons = styled(MaterialIcons)`
+  color: ${({ theme }) => theme.colors.foreground};
 `;
 
 const TitleInput = styled.TextInput`
@@ -44,19 +47,19 @@ export default function Editor() {
       <Container>
         <EditorToolbarContainer>
           <ToolbarIcon onPress={() => {}}>
-            <MaterialIcons name="format-indent-decrease" size={24} />
+            <StyledMaterialIcons name="format-indent-decrease" size={24} />
           </ToolbarIcon>
           <ToolbarIcon onPress={() => {}}>
-            <MaterialIcons name="format-indent-increase" size={24} />
+            <StyledMaterialIcons name="format-indent-increase" size={24} />
           </ToolbarIcon>
           <ToolbarIcon onPress={() => {}}>
-            <MaterialIcons name="format-bold" size={24} />
+            <StyledMaterialIcons name="format-bold" size={24} />
           </ToolbarIcon>
           <ToolbarIcon onPress={() => {}}>
-            <MaterialIcons name="format-italic" size={24} />
+            <StyledMaterialIcons name="format-italic" size={24} />
           </ToolbarIcon>
           <ToolbarIcon onPress={() => {}}>
-            <MaterialIcons name="format-underline" size={24} />
+            <StyledMaterialIcons name="format-underline" size={24} />
           </ToolbarIcon>
           <ToolbarIcon
             onPress={() => {
@@ -64,7 +67,10 @@ export default function Editor() {
               Keyboard.dismiss();
             }}
           >
-            <MaterialIcons name={isPreview ? "edit" : "preview"} size={24} />
+            <StyledMaterialIcons
+              name={isPreview ? "edit" : "preview"}
+              size={24}
+            />
           </ToolbarIcon>
         </EditorToolbarContainer>
 
