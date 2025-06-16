@@ -1,6 +1,6 @@
-import { textStyle } from "@/src/styles/textStyle";
-import { theme } from "@/src/styles/theme";
-import { useColorScheme } from "react-native";
+import { textStyleObject } from "@/src/styles/textStyle";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import styled from "styled-components/native";
 
 const Container = styled.View`
@@ -10,40 +10,56 @@ const Container = styled.View`
   gap: 16px;
 `;
 
+const EditorToolbarContainer = styled.View`
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 12px;
+`;
+
+const ToolbarIcon = styled.TouchableOpacity`
+  size: 24px;
+  tint-color: ${({ theme }) => theme.colors.foreground};
+`;
+
 const TitleInput = styled.TextInput`
-  ${textStyle("title")};
+  font-size: ${textStyleObject("title").fontSize}px;
   color: ${({ theme }) => theme.colors.foreground};
-  background-color: ${({ theme }) => theme.colors.primaryForeground};
-  height: 72px;
-  padding: 16px;
-  border-radius: 12px;
+  height: 40px;
 `;
 
 const ContentInput = styled.TextInput`
-  ${textStyle("body2")};
+  flex: 1;
+  font-size: ${textStyleObject("body2").fontSize}px;
   color: ${({ theme }) => theme.colors.foreground};
-  min-height: 120px;
   text-align-vertical: top;
-  background-color: ${({ theme }) => theme.colors.primaryForeground};
-  border-radius: 12px;
-  padding: 16px;
 `;
 
 export default function Editor() {
-  const scheme = useColorScheme();
-  const selectedTheme = scheme === "dark" ? theme.dark : theme.light;
-
   return (
-    <Container>
-      <TitleInput
-        style={{ color: selectedTheme.colors.foreground }}
-        placeholder="Title"
-      />
-      <ContentInput
-        multiline={true}
-        style={{ color: selectedTheme.colors.foreground }}
-        placeholder="Content"
-      />
-    </Container>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <Container>
+        <EditorToolbarContainer>
+          <ToolbarIcon onPress={() => {}}>
+            <MaterialIcons name="format-indent-decrease" size={24} />
+          </ToolbarIcon>
+          <ToolbarIcon onPress={() => {}}>
+            <MaterialIcons name="format-indent-increase" size={24} />
+          </ToolbarIcon>
+          <ToolbarIcon onPress={() => {}}>
+            <MaterialIcons name="format-bold" size={24} />
+          </ToolbarIcon>
+          <ToolbarIcon onPress={() => {}}>
+            <MaterialIcons name="format-italic" size={24} />
+          </ToolbarIcon>
+          <ToolbarIcon onPress={() => {}}>
+            <MaterialIcons name="format-underline" size={24} />
+          </ToolbarIcon>
+        </EditorToolbarContainer>
+
+        <TitleInput placeholder="제목" />
+        <ContentInput multiline={true} placeholder="내용" />
+      </Container>
+    </TouchableWithoutFeedback>
   );
 }
