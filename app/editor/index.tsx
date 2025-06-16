@@ -1,5 +1,6 @@
 import { textStyleObject } from "@/src/styles/textStyle";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useState } from "react";
 import { Keyboard, TouchableWithoutFeedback } from "react-native";
 import styled from "styled-components/native";
 
@@ -36,6 +37,8 @@ const ContentInput = styled.TextInput`
 `;
 
 export default function Editor() {
+  const [isPreview, setIsPreview] = useState(false);
+
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <Container>
@@ -55,10 +58,22 @@ export default function Editor() {
           <ToolbarIcon onPress={() => {}}>
             <MaterialIcons name="format-underline" size={24} />
           </ToolbarIcon>
+          <ToolbarIcon
+            onPress={() => {
+              setIsPreview(!isPreview);
+              Keyboard.dismiss();
+            }}
+          >
+            <MaterialIcons name={isPreview ? "edit" : "preview"} size={24} />
+          </ToolbarIcon>
         </EditorToolbarContainer>
 
-        <TitleInput placeholder="제목" />
-        <ContentInput multiline={true} placeholder="내용" />
+        <TitleInput placeholder="제목" editable={!isPreview} />
+        <ContentInput
+          multiline={true}
+          placeholder="내용"
+          editable={!isPreview}
+        />
       </Container>
     </TouchableWithoutFeedback>
   );
