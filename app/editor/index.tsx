@@ -1,7 +1,13 @@
 import { textStyleObject } from "@/src/styles/textStyle";
+import { theme } from "@/src/styles/theme";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useState } from "react";
-import { Keyboard, TouchableWithoutFeedback } from "react-native";
+import {
+  Keyboard,
+  TouchableWithoutFeedback,
+  useColorScheme,
+} from "react-native";
+import Markdown from "react-native-markdown-display";
 import styled from "styled-components/native";
 
 const Container = styled.View`
@@ -40,7 +46,10 @@ const ContentInput = styled.TextInput`
 `;
 
 export default function Editor() {
+  const scheme = useColorScheme();
+  const selectedTheme = scheme === "dark" ? theme.dark : theme.light;
   const [isPreview, setIsPreview] = useState(false);
+  const [text, setText] = useState("");
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -75,11 +84,25 @@ export default function Editor() {
         </EditorToolbarContainer>
 
         <TitleInput placeholder="제목" editable={!isPreview} />
-        <ContentInput
-          multiline={true}
-          placeholder="내용"
-          editable={!isPreview}
-        />
+        {isPreview ? (
+          <Markdown
+            style={{
+              text: {
+                color: selectedTheme.colors.foreground,
+              },
+            }}
+          >
+            {text}
+          </Markdown>
+        ) : (
+          <ContentInput
+            value={text}
+            multiline={true}
+            placeholder="내용"
+            editable={!isPreview}
+            onChangeText={setText}
+          />
+        )}
       </Container>
     </TouchableWithoutFeedback>
   );
