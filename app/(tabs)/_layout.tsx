@@ -1,7 +1,7 @@
 import { useFontLoaded } from "@/src/components/FontLoaders";
 import { useAuth } from "@/src/contexts/AuthContext";
 import { theme } from "@/src/styles/theme";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Redirect, Tabs } from "expo-router";
 import { useColorScheme } from "react-native";
 import { styled, ThemeProvider } from "styled-components/native";
@@ -47,7 +47,7 @@ export default function TabsLayout() {
             options={{
               title: "홈",
               tabBarIcon: ({ color }) => (
-                <Ionicons name="home" color={color} size={24} />
+                <MaterialIcons name="home-filled" color={color} size={24} />
               ),
             }}
           />
@@ -56,7 +56,7 @@ export default function TabsLayout() {
             options={{
               title: "설정",
               tabBarIcon: ({ color }) => (
-                <Ionicons name="settings" color={color} size={24} />
+                <MaterialIcons name="settings" color={color} size={24} />
               ),
             }}
           />
