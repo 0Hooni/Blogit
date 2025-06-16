@@ -1,8 +1,7 @@
 import { useFontLoaded } from "@/src/components/FontLoaders";
 import { useAuth } from "@/src/contexts/AuthContext";
-import { textStyleObject } from "@/src/styles/textStyle";
 import { theme } from "@/src/styles/theme";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { Redirect, Tabs } from "expo-router";
 import { useColorScheme } from "react-native";
 import { styled, ThemeProvider } from "styled-components/native";
@@ -29,38 +28,35 @@ export default function TabsLayout() {
       <AppContainer>
         <Tabs
           screenOptions={{
-            headerShown: true,
+            headerShown: false,
             headerShadowVisible: false,
             headerStyle: {
               backgroundColor: selectedTheme.colors.background,
             },
-            headerTitleAlign: "left",
             headerTintColor: selectedTheme.colors.foreground,
-            headerTitleStyle: textStyleObject("display"),
             tabBarStyle: {
               backgroundColor: selectedTheme.colors.background,
               borderTopWidth: 0,
             },
             tabBarActiveTintColor: selectedTheme.colors.foreground,
             tabBarInactiveTintColor: selectedTheme.colors.mutedForeground,
-            tabBarShowLabel: false,
           }}
         >
           <Tabs.Screen
-            name="index"
+            name="(home)"
             options={{
               title: "홈",
               tabBarIcon: ({ color }) => (
-                <Ionicons name="home" color={color} size={32} />
+                <MaterialIcons name="home-filled" color={color} size={24} />
               ),
             }}
           />
           <Tabs.Screen
-            name="setting"
+            name="(setting)"
             options={{
               title: "설정",
               tabBarIcon: ({ color }) => (
-                <Ionicons name="settings" color={color} size={32} />
+                <MaterialIcons name="settings" color={color} size={24} />
               ),
             }}
           />
