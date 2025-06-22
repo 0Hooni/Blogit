@@ -45,29 +45,62 @@ const ContentInput = styled.TextInput`
   text-align-vertical: top;
 `;
 
+enum MarkdownStyle {
+  BOLD = "bold",
+  ITALIC = "italic",
+  UNDERLINE = "underline",
+  INDENT = "indent",
+  OUTDENT = "outdent",
+}
+
 export default function Editor() {
   const scheme = useColorScheme();
   const selectedTheme = scheme === "dark" ? theme.dark : theme.light;
   const [isPreview, setIsPreview] = useState(false);
   const [text, setText] = useState("");
+  const [selection, setSelection] = useState({ start: 0, end: 0 });
+  const [selectedText, setSelectedText] = useState("");
+
+  const applyMarkdown = (style: MarkdownStyle) => {
+    const { start, end } = selection;
+    const selectedText = text.slice(start, end);
+
+    switch (style) {
+      case MarkdownStyle.BOLD:
+        setText(text.replace(selectedText, `**${selectedText}**`));
+        break;
+      case MarkdownStyle.ITALIC:
+        setText(text.replace(selectedText, `*${selectedText}*`));
+        break;
+      case MarkdownStyle.UNDERLINE:
+        setText(text.replace(selectedText, `_${selectedText}_`));
+        break;
+      case MarkdownStyle.INDENT:
+        setText(text.replace(selectedText, `  ${selectedText}`));
+        break;
+      case MarkdownStyle.OUTDENT:
+        setText(text.replace(selectedText, selectedText.replace(/^  /, "")));
+        break;
+    }
+  };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <Container>
         <EditorToolbarContainer>
-          <ToolbarIcon onPress={() => {}}>
+          <ToolbarIcon onPress={() => applyMarkdown(MarkdownStyle.OUTDENT)}>
             <StyledMaterialIcons name="format-indent-decrease" size={24} />
           </ToolbarIcon>
-          <ToolbarIcon onPress={() => {}}>
+          <ToolbarIcon onPress={() => applyMarkdown(MarkdownStyle.INDENT)}>
             <StyledMaterialIcons name="format-indent-increase" size={24} />
           </ToolbarIcon>
-          <ToolbarIcon onPress={() => {}}>
+          <ToolbarIcon onPress={() => applyMarkdown(MarkdownStyle.BOLD)}>
             <StyledMaterialIcons name="format-bold" size={24} />
           </ToolbarIcon>
-          <ToolbarIcon onPress={() => {}}>
+          <ToolbarIcon onPress={() => applyMarkdown(MarkdownStyle.ITALIC)}>
             <StyledMaterialIcons name="format-italic" size={24} />
           </ToolbarIcon>
-          <ToolbarIcon onPress={() => {}}>
+          <ToolbarIcon onPress={() => applyMarkdown(MarkdownStyle.UNDERLINE)}>
             <StyledMaterialIcons name="format-underline" size={24} />
           </ToolbarIcon>
           <ToolbarIcon
@@ -101,6 +134,12 @@ export default function Editor() {
             placeholder="내용"
             editable={!isPreview}
             onChangeText={setText}
+            onSelectionChange={(event) => {
+              const { start, end } = event.nativeEvent.selection;
+              const selectedText = text.slice(start, end);
+              setSelection({ start, end });
+              setSelectedText(selectedText);
+            }}
           />
         )}
       </Container>
